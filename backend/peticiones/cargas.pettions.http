@@ -1,0 +1,51 @@
+### Crear el usuario con SIGNUP
+
+POST http://localhost:4010/signup
+Content-Type: application/json
+
+{
+    "username": "Guiligan",
+    "email": "guiligan@gmail.com",
+    "password": "RIKjac20",
+    "avatarURL": "https://img.freepik.com/foto-gratis/representacion-3d-avatar-llamada-zoom_23-2149556781.jpg?size=626&ext=jpg&ga=GA1.1.1192148877.1697572531&semt=sph"     
+       
+}
+
+
+### Iniciar sesion del usuario
+
+POST http://localhost:4010/signin
+Content-Type: application/json
+
+{
+    "email": "guiligan7@gmail.com",
+    "password": "IGOter12"    
+       
+}
+
+
+### Crear un post
+
+POST http://localhost:4010/createPost
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTIxNzU3NywiZXhwIjoxNzAxMjIxMTc3fQ.fSg095I66OhkhKt3UVkz0igqZkNAUN-a6jnKeDKlPhc
+
+{
+    "title": "Rincones Mágicos de Italia",
+    "description": "En mi travesía por Italia, fui cautivado por la Toscana y sus viñedos que se pierden",
+    "imageURL": "https://img.freepik.com/foto-gratis/paisaje-urbano-centro-antiguo-roma-italia_1268-20482.jpg?w=1380&t=st=1701164044~exp=1701164644~hmac=cc52c3b064d25f99b4d14bdfbe8ab75380757d2c18ba0d400039b866dcb56824"
+      
+}
+
+
+
+### Crear un Comentario
+
+POST http://localhost:4010/post/6565eaf01b57faccf68dedfa
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVlNjA0OGNjMWEyNjEzNTMzZTkxOCIsImlhdCI6MTcwMTE3ODEwOCwiZXhwIjoxNzAxMTgxNzA4fQ.kZd7OoZafZPEgStuu01Kr50q3O62PaBvp2BRzvor4wQ
+
+{
+    "description": "Hola soy Mariela me gusta tu post"
+      
+}

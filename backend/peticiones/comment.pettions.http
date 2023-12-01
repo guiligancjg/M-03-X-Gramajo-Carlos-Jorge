@@ -1,0 +1,26 @@
+### Mostrar todos los Comentarios de un usuario
+GET http://localhost:4010/allComment
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3MzI5NiwiZXhwIjoxNzAxMTc2ODk2fQ.hnsAtgiVeGs-lEPzdYhNk-1qo1sI41c07Nfb0fDZWGY
+
+
+### Actualizar Comentario
+PUT http://localhost:4010/updateComment/6565c7aca629952d76e820d8
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3NTMxMiwiZXhwIjoxNzAxMTc4OTEyfQ.K1DtD_a_fwPVYyeA_QOUkuWNERqj3Jbptlqyd2-mkWc
+
+{
+
+    "description": "gramaddjojajaja@gmail.com"
+     
+}
+
+/// HAY QUE SACAR LA COMA DEL JSON ULTIMA LINEA PORQUE DA ERROR
+
+
+
+### Eliminar un comentario
+DELETE http://localhost:4010/updateComment/6565e8421b57faccf68dedf4
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVlNjA0OGNjMWEyNjEzNTMzZTkxOCIsImlhdCI6MTcwMTE3NzQzNSwiZXhwIjoxNzAxMTgxMDM1fQ.3M4W-s9Y0HHagQw2BclHe1SytNmdlSCnVOdmoGTkxrI
+
+

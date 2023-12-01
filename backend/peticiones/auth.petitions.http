@@ -1,0 +1,62 @@
+### Crear el usuario con SIGNUP
+
+POST http://localhost:4010/signup
+Content-Type: application/json
+
+{
+    "username": "Maria Gonzalez",
+    "email": "Maria@gmail.com",
+    "password": "RIKjac20",
+    "avatarURL": "https://img.freepik.com/foto-gratis/representacion-3d-avatar-llamada-zoom_23-2149556781.jpg?size=626&ext=jpg&ga=GA1.1.1192148877.1697572531&semt=sph"     
+       
+}
+
+
+### Iniciar sesion del usuario
+POST http://localhost:4010/signin
+Content-Type: application/json
+
+{
+    "email": "maria@gmail.com",
+    "password": "RIKjac20"    
+       
+}
+
+
+### Iniciar sesion del usuario con MARIELA
+
+POST http://localhost:4010/signin
+Content-Type: application/json
+
+{
+    "email": "mariela@gmail.com",
+    "password": "RIKjac20"    
+       
+}
+//656408429f8e3dfb86d74bc0
+
+### mostra el profile y datos del usario
+GET http://localhost:4010/profile
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3MTIyOCwiZXhwIjoxNzAxMTc0ODI4fQ.cYp0px1AmuQmainPhOND3R-Jt9PhYYVD75rQY3NlRrQ
+
+
+
+### Actualizar datos del usuario
+
+PUT http://localhost:4010/profile
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3MTIyOCwiZXhwIjoxNzAxMTc0ODI4fQ.cYp0px1AmuQmainPhOND3R-Jt9PhYYVD75rQY3NlRrQ
+
+{
+    "username": "Guiligan",
+    "email": "guiligan7@gmail.com",
+    "password": "IGOter12",
+    "avatarURL": "https://img.freepik.com/foto-gratis/representacion-3d-avatar-llamada-zoom_23-2149556781.jpg?size=626&ext=jpg&ga=GA1.1.1192148877.1697572531&semt=sph"     
+       
+}
+
+
+### Eliminar usuario
+DELETE http://localhost:4010/profile/6565c02196ba1fd027b15e1a
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjMDIxOTZiYTFmZDAyN2IxNWUxYSIsImlhdCI6MTcwMTE3MTY1MSwiZXhwIjoxNzAxMTc1MjUxfQ._a7wmZcngbEOVHCgMfr9vplSyJd88Mp22D5-webDcd8

@@ -1,0 +1,56 @@
+/// HAY QUE SACAR LA COMA DEL JSON ULTIMA LINEA PORQUE DA ERROR
+
+### Mostrar todos los post
+GET http://localhost:4010/post
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTIwOTg5NiwiZXhwIjoxNzAxMjEzNDk2fQ.0ysHGYVNswbfXV58XStW7mlddofS80dZEN7mjDyrtTo
+
+
+### Mostrar todos los post sin Token
+GET http://localhost:4010/postsintoken
+Content-Type: application/json
+
+
+
+
+### Crear un post
+
+POST http://localhost:4010/createPost
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZWM4NWNlODM3ZDJhZmIxZmQyOSIsImlhdCI6MTcwMTM3OTgwMCwiZXhwIjoxNzAxNDE1ODAwfQ.dAQ7YrzH587XwV2w3yqt44AfTR5JfuLt9iGk_PHoHgQ
+
+{
+    "title": "Aventura Australiana",
+    "description": "Sumérgete en la diversidad de Australia, desde las playas de la Costa Dorada hasta la Grande Barrera de Coral. Explora la vibrante vida silvestre y descubre la cultura única de las ciudades cosmopolitas. Una aventura que combina la emoción y la relajación.",
+    "imageURL": "https://img.freepik.com/foto-gratis/hermosa-joven-pareja-europea-disfrutando-hermosa-vista-famoso-monument-valley-utah-ee_181624-50377.jpg?w=1060&t=st=1701379875~exp=1701380475~hmac=30f6d07d4ec567c1c0b6f78a7cf4985ed4b5e55946597a695aaa2a78094d84e2"
+      
+}
+
+
+### Eliminar un post
+DELETE http://localhost:4010/post/6565e7c2894e3197b3a01bc6
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVlNjA0OGNjMWEyNjEzNTMzZTkxOCIsImlhdCI6MTcwMTE3NzMwNSwiZXhwIjoxNzAxMTgwOTA1fQ.snA3rpWFOi9JkPFySjKcHvNXEdzD1_Mq1btWpLv07UU
+
+
+### Actualizar un POST
+PUT http://localhost:4010/post/6565e148b15eb6f0264d49b8
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3NTc4MiwiZXhwIjoxNzAxMTc5MzgyfQ.vYFXPa4uX6UGVhHftvCUo7E_PGCg26q-W1Yqss328js
+
+{
+    "title": "Esto es una prueba",
+    "description": "gdf@l.com",
+    "imageURL": "https://img.freepik.com/foto-gratis/representacion-3d-avatar-llamada-zoom_23-2149556781.jpg?size=626&ext=jpg&ga=GA1.1.1192148877.1697572531&semt=sph"
+      
+}
+
+### Crear un Comentario
+
+POST http://localhost:4010/post/6568fdfd5ce837d2afb1fd23
+Content-Type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZWM4NWNlODM3ZDJhZmIxZmQyOSIsImlhdCI6MTcwMTM4MDM5OCwiZXhwIjoxNzAxNDE2Mzk4fQ.VybJdiEsFvWe_fOndrYppAnIOrEzee4t6jUByxp4B1c
+
+{
+    "description": "Hola soy Mariela me gusta tu post"
+      
+}
