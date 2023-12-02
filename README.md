@@ -1,6 +1,6 @@
 # Proyecto Argentina Programa 4.0 - M-03
 
-¡Bienvenido al proyecto Argentina Programa 4.0 - EPICA Comuisión: M-03 Este proyecto incluye un backend y frontend, y este archivo README proporciona instrucciones para ejecutarlo localmente.
+¡Bienvenido al proyecto Argentina Programa 4.0 - EPICA Comisión: M-03 Este proyecto incluye un backend y frontend, y este archivo README proporciona instrucciones para ejecutarlo localmente.
 
 ## Descripción del Proyecto
 
