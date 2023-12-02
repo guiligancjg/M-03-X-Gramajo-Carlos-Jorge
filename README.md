@@ -28,7 +28,7 @@ Asegúrate de configurar las variables de entorno necesarias. Puedes encontrar u
 cd frontend
 npm install
 ````
-4. Ejecutar el Backend
+4. Ejecutar el Backend y Frontend
 ```bash
 npm run dev
 ````
