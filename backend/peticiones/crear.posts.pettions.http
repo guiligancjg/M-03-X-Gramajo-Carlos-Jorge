@@ -48,9 +48,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1
 
 POST http://localhost:4010/post/6568fdfd5ce837d2afb1fd23
 Content-Type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZWM4NWNlODM3ZDJhZmIxZmQyOSIsImlhdCI6MTcwMTM4MDM5OCwiZXhwIjoxNzAxNDE2Mzk4fQ.VybJdiEsFvWe_fOndrYppAnIOrEzee4t6jUByxp4B1c
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZGJkNWNlODM3ZDJhZmIxZmQyMCIsImlhdCI6MTcwMTQ4MDIyMSwiZXhwIjoxNzAxNTE2MjIxfQ.IEmIMJCY6K1FcrDyaoaMZB-RgG2ETTqZfO5yiEfQ1J0
 
 {
-    "description": "Hola soy Mariela me gusta tu post"
+    "description": "Hola Mariela muchas gracias por el comentario!!!"
       
 }

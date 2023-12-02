@@ -30,12 +30,12 @@ export const getAllPosteosSinToken = async (req, res) => {
     // Utiliza populate para poblar los detalles del autor y los comentarios
     const posts = await Post.find().populate({
       path: 'author',
-      select: 'username email', // Selecciona los campos que deseas mostrar del autor
+      select: 'username email avatarURL', // Selecciona los campos que deseas mostrar del autor
     }).populate({
       path: 'comments',
       populate: {
         path: 'author',
-        select: 'username email', // Selecciona los campos que deseas mostrar del autor del comentario
+        select: 'username email avatarURL', // Selecciona los campos que deseas mostrar del autor del comentario
       },
     });
 
@@ -43,7 +43,7 @@ export const getAllPosteosSinToken = async (req, res) => {
 
 
   } catch (error) {
-    res.status(400).json({ message: "Error al obtener los posts del usuario...", error: error.message });
+    res.status(400).json(["Error al obtener los posts del usuario..."]);
   }
 };
 

@@ -1,8 +1,11 @@
 import { Dispatch, SetStateAction, createContext, useState, ReactNode, useEffect} from "react";
-import { registerReq, loginRequest } from "../../api/auth";
+import { registerReq, loginRequest} from "../../api/auth";
 import User from "../../Types/Users";
 import UserLogin from '../../Types/login';
 import axios from 'axios';
+//import { postsHomeDatos } from "../../Types/TodosLosPorst"
+
+
 
 
 export interface UserContextInterface {
@@ -14,6 +17,7 @@ export interface UserContextInterface {
     signin: (user: User) => void;
     setErrors: Dispatch<SetStateAction<string[]>>;
     setIsAuth: Dispatch<SetStateAction<boolean>>;
+    //postPublic: () => Promise<postsHomeDatos>; 
 }
 
 
@@ -31,8 +35,12 @@ const defaultState = {
     errors: [],
     setErrors: () => [],
     setIsAuth: () => {},
+    
 } as UserContextInterface
-
+/*postPublic: async () => {
+        console.warn('Implementación básica de postPublic: Devuelve una promesa resuelta con un objeto vacío.');
+        return Promise.resolve({ posts: [], users: [], comments: [] });
+      },*/
 export const UserContext = createContext(defaultState)
 
 
@@ -93,7 +101,26 @@ export default function UserProvider({ children }: UserProvideProps) {
           };
 
 
-
+/*
+const postPublic = async () => {
+            try {
+              const res = await potsHomePublic();
+             
+              console.log("potsHomePublic AuthContex.tsx",res);
+              //setIsAuth(true);
+              return res;
+              
+            } catch (error) {
+                console.log("potsHomePublic AuthContex.tsx",error);
+           if (axios.isAxiosError(error)) {
+                //console.log('Error en el registro signin en el archivo AuthContexto:', error);
+                setErrors(error.response?.data); // O ajusta según la estructura de tu error
+            } else {
+                console.log('Error desconocido en el registro:', error);
+            }
+            }
+          };
+*/
   //este useEffect es para manejar el tiempo del error y limpiar pasado el tiempo estipulado
   useEffect(() => {
     if (errors.length > 0) {
@@ -116,7 +143,8 @@ return (
                 setErrors,
                 signup,
                 signin,
-                setIsAuth
+                setIsAuth,
+                //postPublic
                 
             }}>
                 {children}
