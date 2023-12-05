@@ -6,10 +6,10 @@
 //import { Card, ListGroup, Accordion } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
 //import { useAuth } from "../components/Context/useAuth"
-import postsHomeDatos from "../Types/TodosLosPorst"
+import postsHomeDatos from "../../Types/TodosLosPorst"
 //import { potsHomePublic } from "../api/auth"
 //import Post from '../Types/Posts';
-import { potsHomePublic } from "../api/auth"
+import { potsHomePublic } from "../../api/auth"
 import { Accordion, Card, ListGroup, Toast } from 'react-bootstrap';
 import { AxiosResponse } from 'axios';
 
@@ -38,6 +38,7 @@ const PostHome: React.FC = () => {
 
     return (
         <>
+        <div>ESTE ES LA PARTE PUBLICA</div>
 
             <div className="container mt-3">
                 <section className="wid-menu-categories wid">
@@ -191,13 +192,15 @@ const PostHome: React.FC = () => {
 
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header >Comentarios</Accordion.Header>
+                                            
                                             {data && data.map((post, i) => (
                                                 <div key={i}>
-                                                    <Accordion.Body style={{ backgroundColor: '#181A1B' , color: '#fff' }}>
-                                                        {post.comments && post.comments.map((comment, e) => (
+                                                    <Accordion.Body style={{ backgroundColor: '#434344' , color: '#fff' }}>
+                                                    Debes De Estar Registrado Inicia Sesion Aqui Para Comentar.
+                                                        {post && post.comments.map((comment, e) => (
                                                             <div key={e} className=''>
                                                                 <Toast style={{ width: 'auto', backgroundColor: '#181A1B' , color: '#fff' }} className="container-fluid">
-                                                                    <Toast.Header style={{ width: 'auto' , backgroundColor: '#1C1E1E', color: '#fff'}}>
+                                                                    <Toast.Header style={{ width: 'auto' , backgroundColor: '#353439', color: '#fff'}}>
                                                                         <img style={{height: '34px', width: '34px'}} src={comment.author.avatarURL} className="rounded me-2" alt="" />
                                                                         <strong className="me-auto">{comment.author.username}</strong>
                                                                         <span>11 mins ago</span>

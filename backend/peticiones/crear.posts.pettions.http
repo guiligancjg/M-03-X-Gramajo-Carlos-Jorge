@@ -17,7 +17,7 @@ Content-Type: application/json
 
 POST http://localhost:4010/createPost
 Content-Type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZWM4NWNlODM3ZDJhZmIxZmQyOSIsImlhdCI6MTcwMTM3OTgwMCwiZXhwIjoxNzAxNDE1ODAwfQ.dAQ7YrzH587XwV2w3yqt44AfTR5JfuLt9iGk_PHoHgQ
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmU5MTJkMjNiY2Y0NGVlZDg5Zjg3NCIsImlhdCI6MTcwMTc0NTE1MywiZXhwIjoxNzAxNzgxMTUzfQ.NFB_zS0FRvUmicwvJTruEJ4Oxu2OXqESV8xGsH41bBg
 
 {
     "title": "Aventura Australiana",
@@ -48,7 +48,7 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1
 
 POST http://localhost:4010/post/6568fdfd5ce837d2afb1fd23
 Content-Type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjhmZGJkNWNlODM3ZDJhZmIxZmQyMCIsImlhdCI6MTcwMTQ4MDIyMSwiZXhwIjoxNzAxNTE2MjIxfQ.IEmIMJCY6K1FcrDyaoaMZB-RgG2ETTqZfO5yiEfQ1J0
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmU5MTJkMjNiY2Y0NGVlZDg5Zjg3NCIsImlhdCI6MTcwMTc0NTE1MywiZXhwIjoxNzAxNzgxMTUzfQ.NFB_zS0FRvUmicwvJTruEJ4Oxu2OXqESV8xGsH41bBg
 
 {
     "description": "Hola Mariela muchas gracias por el comentario!!!"

@@ -22,7 +22,7 @@ const CarouselHome = () => {
                     alt="slide3"
                 />
 
-                <Carousel.Caption style={{color: '#fff'}}>
+                <Carousel.Caption>
                     <h3>"Explorando rincones, descubriendo historias."</h3>
                     <p>"No cuentes los días, haz que los días cuenten."</p>
                 </Carousel.Caption>
@@ -37,7 +37,7 @@ const CarouselHome = () => {
                     alt="slide3"
                 />
 
-                <Carousel.Caption>
+                <Carousel.Caption >
                     <h3>"Rincones que inspiran, viajes que transforman."</h3>
                     <p>"Descubre el mundo fuera de tu zona de confort."</p>
                 </Carousel.Caption>

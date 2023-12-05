@@ -3,7 +3,7 @@ import { FaXTwitter } from "react-icons/fa6";
 
 function Footer() {
   return (
-    <div className="container text-white fixed-bottom">
+    <div className="container text-white">
         <footer className="d-flex flex-wrap justify-content-between aling-items-center py-3 my-4 border-top">
             <div className="col-md-4 d-flex aling-items-center">
                 <a href="/" className="mb-3 me-2 mb-md-0 text-decoration-none 1h-1">RINCON VIAJERO</a>

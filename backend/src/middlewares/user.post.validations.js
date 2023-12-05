@@ -2,27 +2,27 @@ import { body, validationResult } from "express-validator";
 export const validateRegister = [
   body("username")
     .notEmpty()
-    .withMessage("Username no debe estar vacío")
+    .withMessage("Ingrese el nombre del Usuario...")
     .isLength({ min: 6 })
-    .withMessage("El Username debe tener al menos 6 caractéres"),
+    .withMessage("El Usuario debe tener al menos 6 caractéres"),
 
-  body("email").isEmail().withMessage("Por favor ingrese un mail válido"),
+  body("email").isEmail().withMessage("Por favor ingrese un e-mail válido"),
 
   body("password")
     .notEmpty()
     .withMessage("El Password es obligatorio")
     .isLength({ min: 6 })
-    .withMessage("Longitud mínima del password es de 6 caractéres"),
+    .withMessage("La contraseña debe tener al menos 6 caracteres"),
 ];
 
 export const validateLogin = [
-  body("email").isEmail().withMessage("Por favor ingrese un mail válido"),
+  body("email").isEmail().withMessage("Por favor ingrese un e-mail válido"),
 
   body("password")
     .notEmpty()
     .withMessage("El Password es obligatorio")
     .isLength({ min: 6 })
-    .withMessage("Longitud mínima del password es de 6 caractéres"),
+    .withMessage("La contraseña debe tener al menos 6 caracteres"),
     
 ];
 

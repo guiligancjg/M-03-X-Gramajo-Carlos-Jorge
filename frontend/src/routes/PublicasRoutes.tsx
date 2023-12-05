@@ -1,13 +1,13 @@
 import { useAuth } from "../components/Context/useAuth";
 import { Outlet } from "react-router-dom";
 
-export const PrivateRoutes = () => {
+export const PublicasRoutes = () => {
 
     const { isAuth } = useAuth();
 
     console.log(isAuth);
-    if (isAuth) {
-        console.log("entro en la parte privada en PrivateRoutes")
+    if (!isAuth) {
+        console.log("entro en la parte publica en PublicasRoutes")
         return <Outlet />;
 
       

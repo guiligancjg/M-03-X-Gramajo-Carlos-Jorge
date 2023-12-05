@@ -1,5 +1,5 @@
-import { Navbar, Container, Nav, Button } from "react-bootstrap"
-import { Person } from "react-bootstrap-icons"
+import { Navbar, Container, Nav } from "react-bootstrap"
+//import { Person } from "react-bootstrap-icons"
 import Image from 'react-bootstrap/Image'
 import { Link } from "react-router-dom"
 
@@ -11,10 +11,12 @@ const NavBarPublica = () => {
     <>
       <Navbar id="detalle-section" expand="lg" className="bg-body-tertiary" bg="dark" data-bs-theme="dark">
         <Container>
-          <Nav.Link as={Link} to="/">
+          <Nav.Link as={Link} to="/home">
             <Image src={"imagenes/logo.png"} alt="Gramajo Carlos Jorge - EPICA" />
           </Nav.Link>
-
+          <Nav.Link as={Link} to="/profile">
+            <Image src={"imagenes/logo.png"} alt="Gramajo Carlos Jorge - EPICA" />
+          </Nav.Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -22,6 +24,9 @@ const NavBarPublica = () => {
             </Nav>
 
             <Nav className="d-none d-md-flex gap-4">
+
+
+              {/*
               <Link to="/login">
                 <Button className='d-flex gap-1 align-items-center rounded p-3 text-decoration-none mt-1'
                   style={{ cursor: 'pointer', height: '10px' }}  size="sm">
@@ -37,7 +42,7 @@ const NavBarPublica = () => {
                 <span style={{ textDecoration: 'none', color: '#ffffff' }}>Registrarse</span>
              
               </Link>
-
+*/}
             </Nav>
 
 
