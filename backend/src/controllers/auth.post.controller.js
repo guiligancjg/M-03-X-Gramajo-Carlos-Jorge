@@ -2,6 +2,7 @@ import User from "../models/user.post.model.js";
 import jwt from "jsonwebtoken";
 import { settingTokenSecret } from "../views/config.js";
 import { createAccessToken } from "../middlewares/jwt.validation.js";
+//import { verificarToken }  from "../middlewares/jwt.validation.js"
 
 // Metodos de SIGNUP (Registro de usuario) y SIGNIN (Inicio de Sesión)
 
@@ -9,6 +10,8 @@ export const signup = async (req, res) => {
   try {
     const { username, email, password, avatarURL } = req.body;
 
+    const userFound = await User.findOne({email});
+    if(userFound) return res.status(400).json(["El Usuario ya existe!!!, ya hay un e-mail registrado."]);
 
     const newUser = new User({
       username,
@@ -22,21 +25,10 @@ export const signup = async (req, res) => {
 
     const token = await createAccessToken({ id: uservalidate._id });
     res.cookie("token", token);    
-    res.status(200).json(["Usuario creado con éxito"]);
-
-/*
- res.status(200).json({
-      message: "Usuario creado con éxito",
-      id: uservalidate.id,
-      username: uservalidate.username,
-      email: uservalidate.email,
-      token,
-    });
-*/
-    
-    
+    res.json({ success: true});
+   
   } catch (error) {
-    res.status(404).json(["Ingresa otro correo electonico, ya existe el Usuario..."]);
+    res.status(404).json({ success: false, message: "Error al crear el Registro!!!" });
   }
 };
 
@@ -60,7 +52,7 @@ export const signin = async (req, res) => {
     } else {
       const token = await createAccessToken({ id: user._id });
       res.cookie("token", token);    
-      res.status(200).json(["Usuario ingreso con exito!!!"])
+      res.json({ success: true});
     };
      
      /* res.status(200).json({
@@ -69,7 +61,7 @@ export const signin = async (req, res) => {
       });*/
     
   } catch (error) {
-    res.status(400).json(["Error en el inicio de sesion..."]);
+    res.status(404).json({ success: false, message: "Error en el inicio de sesion..."});
   }
 };
 
@@ -105,7 +97,7 @@ export const getUserProfile = async (req, res) => {
 
     // Verificar si el usuario existe
     if (!user) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
+      return res.status(404).json(["Usuario no encontrado."]);
     }
 
     // Devolver la información del usuario
@@ -113,10 +105,7 @@ export const getUserProfile = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({
-        message: "Error al obtener la información del usuario.",
-        error: error.message,
-      });
+      .json(["Error al obtener la información del usuario."]);
   }
 };
 
@@ -185,5 +174,45 @@ export const deleteAccount = async (req, res) => {
         message: "Error al eliminar la cuenta del usuario.",
         error: error.message,
       });
+  }
+};
+
+
+
+
+
+
+const { secret } = settingTokenSecret();
+
+
+export const validarToken = async (req, res) => {
+  try {
+    
+    //const token = req.headers["authorization"];
+    const token = req.headers.authorization;
+    console.log("Esto es token en el Backend en el archivo auth.post",token)
+    console.log("Este es el secreto",secret)
+
+    if (!token) {
+      return res.status(403).json(["No existe el Token..."]);
+    }
+
+    jwt.verify(token, secret, async (err, user) => {
+      
+      if(err) return res.status(401).json(["El Token no esta autorizado..."]);
+      const userFound = await User.findById(user.id);
+      if(!userFound) return res.status(401).json(["Usuario no autorizado Token no esta"]);
+
+    /*  return res.json({
+        username: userFound.username,
+        avatarURL: userFound.avatarURL
+    });*/
+    const { username, avatarURL } = userFound;
+    return res.json([username, avatarURL]);
+
+     
+    });
+  } catch (error) {
+    return res.status(404).json(["error en veifyToken en el servidor"]);
   }
 };

@@ -1,4 +1,4 @@
-import UserProvider from "./components/Context/AuthContext";
+import UserProvider from "./Context/AuthContext";
 import AppRoutes from "./routes/AppRoutes"
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ToastContainer } from "react-toastify";

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { signup, signin, logout, getUserProfile, updateProfile, deleteAccount } from "../controllers/auth.post.controller.js"
+import { signup, signin, logout, getUserProfile, updateProfile, deleteAccount, validarToken } from "../controllers/auth.post.controller.js"
 import { manejarErroresValidacion, validateLogin, validateRegister } from "../middlewares/user.post.validations.js"
 import { verificarToken }  from "../middlewares/auth.jwt.js"
 
@@ -26,3 +26,6 @@ authRouter.put("/profile", verificarToken, updateProfile);
 
 authRouter.delete("/profile/:userId", verificarToken, deleteAccount);
 
+
+/********************************************************************************* */
+authRouter.get("/verifyToken", validarToken);

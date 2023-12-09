@@ -2,30 +2,19 @@
 import { Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
-import { useAuth } from "../../components/Context/useAuth"
+import { useAuth } from "../Context/useAuth"
 import { useEffect, useState } from 'react';
+import NavBar from '../components/Navbar/NavBar';
+import Footer from '../components/Footer/Footer';
+
 
 
 
 const Login = () => {
-  //    const { setUser } = useContext(UserContext);
-
   const { register, handleSubmit, formState: { errors } } = useForm();
-
-  const { signin, isAuth, setIsAuth, errors: registerError } = useAuth();
-
+  const { signin, errors: registerError } = useAuth();
   const [showError, setShowError] = useState(false);
-
-  //Direccionar al Home en caso que el login sea exito!!!
   const navigate = useNavigate();
-  
-  useEffect(() => {
-    if (isAuth) {
-      console.log("el calor en login de isAuth es:", isAuth)
-    }
-
-  }, [isAuth, navigate, setIsAuth]);
-
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -35,38 +24,60 @@ const Login = () => {
         password: data.password,
         avatarURL: data.avatarURL
       };
-      signin(newUser);
-      setShowError(true);
-      navigate("/home")
+
+      type SignupResult = boolean | void;
+
+      const loginExitoso: SignupResult = await signin(newUser);
+      if (typeof loginExitoso === 'boolean') {
+
+        if (loginExitoso) {
+          setShowError(false)
+          //setExito(loginExitoso)
+          
+          navigate("/");
+          //window.location.reload();
+        } else {
+          setShowError(true)
+          console.log('Registro fallido');
+        }
+      } else {
+
+        console.log('La función signup no devolvió un valor booleano');
+      }
+
     } catch (error) {
       //console.error('Error en el registro:', error);
     }
   });
 
-/* Mensaje de error del servidor  */
-useEffect(() => {
-  if (showError) {
-    const timeoutId = setTimeout(() => {
-      setShowError(false);
-    }, 5000);
 
-    return () => clearTimeout(timeoutId);
-  }
-}, [showError]);
+  
+  useEffect(() => {
+    if (showError) {
+      const timeoutId = setTimeout(() => {
+        setShowError(false);
+      }, 2000);
+  
+      return () => clearTimeout(timeoutId);
+    }
+  }, [showError]);
 
   return (
     <>
-
-            <div className='h-20'>
-                {showError && (
-                    <div className="alert alert-danger w-100 text-center" role="alert">
-                        <h2 className="alert-heading">Error</h2>
-                        {registerError && registerError.map((error,i) => (
-                            <div key={i}>{error}</div>
-                        ))}
-                    </div>
-                )}
+     <NavBar />
+      <div className='h-20'>
+        {showError && (
+          <div className="alert alert-danger w-100 text-center" role="alert">
+            <h2 className="alert-heading">Error</h2>
+            <div className="text-success">
+              {registerError.map((error, i) => (
+                <div key={i}>{error}</div>
+              ))}
             </div>
+          </div>
+        )}
+
+      </div>
 
 
 
@@ -91,7 +102,7 @@ useEffect(() => {
             <Form.Label>Email</Form.Label>
 
             <Form.Control type="email" placeholder="Ingrese el email"
-              {...register("email", {required: true} )}
+              {...register("email", { required: true })}
               autoComplete="email"
               isInvalid={!!errors.email}
             />
@@ -102,7 +113,7 @@ useEffect(() => {
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control type="password" placeholder="Password"
-              {...register("password", {required: true} )}
+              {...register("password", { required: true })}
               autoComplete="current-password"
               isInvalid={!!errors.password}
             />
@@ -135,7 +146,7 @@ useEffect(() => {
             <span className='mt-2'>¿No tienes una Cuenta?</span>
 
             <Link to="/register" className="mt-2">
-              <span style={{ textDecoration: 'none', color: '#ffffff' }}>Registrate</span>
+              <span style={{ textDecoration: 'none', color: '#84B6F4' }}>Registrate</span>
 
 
             </Link>
@@ -146,7 +157,7 @@ useEffect(() => {
 
 
       </div>
-
+      <Footer />
     </>
   )
 }

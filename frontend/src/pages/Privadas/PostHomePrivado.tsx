@@ -1,14 +1,5 @@
-//import Card from 'react-bootstrap/Card';
-//import { Accordion, ListGroup } from 'react-bootstrap';
-//import { Accordion } from 'react-bootstrap';
-//import { useState } from "react";
-//import { ApiResponse, potsHome } from '../Types/TodosLosPorst';
-//import { Card, ListGroup, Accordion } from "react-bootstrap";
 import React, { useState, useEffect } from 'react';
-//import { useAuth } from "../components/Context/useAuth"
 import postsHomeDatos from "../../Types/TodosLosPorst"
-//import { potsHomePublic } from "../api/auth"
-//import Post from '../Types/Posts';
 import { potsHomePublic } from "../../api/auth"
 import { Accordion, Card, ListGroup, Toast } from 'react-bootstrap';
 import { AxiosResponse } from 'axios';

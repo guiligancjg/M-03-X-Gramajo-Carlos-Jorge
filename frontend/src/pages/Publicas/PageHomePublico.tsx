@@ -1,11 +1,14 @@
 import CarouselHome from "../../components/CarouselHome/CarouselHome"
 import FooterHome from "../../components/Footer/FooterHome"
+import NavBar from "../../components/Navbar/NavBar"
 import PostHomePublico from "./PostHomePublico"
-import NavBarPublico from "../../components/Navbar/NavBarPublica";
+
+
+
 const HomePublico = () => {
   return (
     <>
-        <NavBarPublico />
+        <NavBar />
         <CarouselHome />
         <PostHomePublico />
         <FooterHome />
@@ -14,3 +17,11 @@ const HomePublico = () => {
 }
 
 export default HomePublico
+
+
+
+
+
+
+
+

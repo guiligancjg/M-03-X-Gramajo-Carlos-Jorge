@@ -38,7 +38,7 @@ Content-Type: application/json
 ### mostra el profile y datos del usario
 GET http://localhost:4010/profile
 Content-Type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1NTk1MzU3OWQ4NSIsImlhdCI6MTcwMTE3MTIyOCwiZXhwIjoxNzAxMTc0ODI4fQ.cYp0px1AmuQmainPhOND3R-Jt9PhYYVD75rQY3NlRrQ
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzBjOWU1Mjg3Mjc0ZGZhM2U1OTRhNCIsImlhdCI6MTcwMjA4NTYwMSwiZXhwIjoxNzAyMTIxNjAxfQ.Iy8Dqc1KP4gnyzm0Rn5DMb_u2gmym3eJsqz7OtRKgGE
 
 
 

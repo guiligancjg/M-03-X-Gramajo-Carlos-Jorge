@@ -33,10 +33,7 @@ const NavBarPublica = () => {
               </Link>
 
 
-              <Link to="/register" className="mt-2">
-                <span style={{ textDecoration: 'none', color: '#ffffff' }}>Registrarse</span>
-             
-              </Link>
+              
 
             </Nav>
 

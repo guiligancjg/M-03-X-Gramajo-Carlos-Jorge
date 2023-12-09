@@ -1,10 +1,14 @@
 //import { useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
 //import { registerReq } from '../api/auth';
-import { useAuth } from "../../components/Context/useAuth"
+import { useAuth } from "../Context/useAuth"
 import { useEffect, useState } from 'react';
+import NavBar from '../components/Navbar/NavBar';
+import Footer from '../components/Footer/Footer';
+//import { useEffect, useState } from 'react';
 
 
 
@@ -12,11 +16,13 @@ const Register = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const { signup, isAuth, setIsAuth,  errors: registerError } = useAuth();
-
+    const { signup, errors: registerError } = useAuth();
+    console.log("lo que entro registerError", registerError.length)
     const [showError, setShowError] = useState(false);
-
-
+    const [exito, setExito] = useState(false);
+    // setShowError(true)
+    const navigate = useNavigate();
+    //const mensaje = ;
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -26,52 +32,84 @@ const Register = () => {
                 password: data.password,
                 avatarURL: data.avatarURL
             };
-            signup(newUser);
-            setShowError(true);
+            
+            type SignupResult = boolean | void;
 
+            const registroExitoso: SignupResult = await signup(newUser);
+
+            if (typeof registroExitoso === 'boolean') {
+
+                if (registroExitoso) {
+                    setShowError(false)
+                    setExito(registroExitoso)
+                    setTimeout(() => {
+                        navigate("/login");
+                      }, 2000);
+                    
+
+                } else {
+                    setShowError(true)
+                    console.log('Registro fallido');
+                }
+            } else {
+
+                console.log('La función signup no devolvió un valor booleano');
+            }
         } catch (error) {
-            //console.error('Error en el registro:', error);
+
+            console.log(error);
+
+
         }
     });
 
 
     //Direccionar al Home en caso que el login sea exito!!!
-    const navigate = useNavigate();
-    useEffect(() => {
-        if (isAuth) {
-            console.log("entro porque isAuth es verdadero")
-            navigate("/login");
-        }
 
-    }, [isAuth, navigate, setIsAuth]);
+    /*    useEffect(() => {
+            if (isAuth) {
+                console.log("entro porque isAuth es verdadero")
+                
+            }
+    
+        }, [isAuth, navigate, setIsAuth]);*/
 
-/* Mensaje de error del servidor  */
+    /* Mensaje de error del servidor  */
 useEffect(() => {
-    if (showError) {
-      const timeoutId = setTimeout(() => {
-        setShowError(false);
-      }, 5000);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [showError]);
-
+        if (showError) {
+          const timeoutId = setTimeout(() => {
+            setShowError(false);
+          }, 2000);
+    
+          return () => clearTimeout(timeoutId);
+        }
+      }, [showError]);
 
 
 
     return (
         <>
+        <NavBar />
             <div className='h-20'>
-                {showError && (
+                {showError ? (
                     <div className="alert alert-danger w-100 text-center" role="alert">
                         <h2 className="alert-heading">Error</h2>
-                        {registerError && registerError.map((error,i) => (
-                            <div key={i}>{error}</div>
-                        ))}
+                        <div className="text-success">
+                            {registerError.map((error, i) => (
+                                <div key={i}>{error}</div>
+                            ))}
+                        </div>
                     </div>
+                ) : (
+                    exito && (
+                        <div className="alert alert-success w-100 text-center" role="alert">
+                            <h2 className="alert-heading">¡Registro Exitoso!</h2>
+                            <div className="text-success">Usuario registrado exitosamente.</div>
+                        </div>
+                    )
                 )}
-            </div>
 
+            </div>
 
 
             <div className='d-flex flex-column justify-content-start align-items-center'>
@@ -85,11 +123,11 @@ useEffect(() => {
                         <Form.Label>Nombre del Usuario</Form.Label>
 
                         <Form.Control type="text" placeholder="Ingrese el Usuario"
-                            {...register("username", {required: true} )}
+                            {...register("username", { required: true })}
                             autoComplete="username"
                             isInvalid={!!errors.username}
                         />
-                    {errors.username && <p>Ingrese el nombre del Usuario</p>}
+                        {errors.username && <p>Ingrese el nombre del Usuario</p>}
 
                     </Form.Group>
 
@@ -98,7 +136,7 @@ useEffect(() => {
 
 
                         <Form.Control type="email" placeholder="Ingrese el email"
-                            {...register("email", {required: true} )}
+                            {...register("email", { required: true })}
                             autoComplete="email"
                             isInvalid={!!errors.email}
                         />
@@ -109,11 +147,11 @@ useEffect(() => {
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password"
-                            {...register("password", {required: true} )}
+                            {...register("password", { required: true })}
                             autoComplete="current-password"
                             isInvalid={!!errors.password}
                         />
-                         {errors.password && <p>Ingrese un password</p>}
+                        {errors.password && <p>Ingrese un password</p>}
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicavatarURL">
@@ -158,10 +196,37 @@ useEffect(() => {
 
 
 
-
+            <Footer />
         </>
     )
 }
 
 export default Register
 
+/*
+ <div className='h-20'>
+                {showError  ? (
+                        <div className="alert alert-danger w-100 text-center" role="alert">
+                            <h2 className="alert-heading">Error</h2>
+                            <div className="text-success">
+                            {registerError.map((error, i) => (
+                                <div key={i}>{error}</div>
+                            ))}
+                            </div>
+                        </div>
+                        ) : (
+                        
+                            <div className="alert alert-success w-100 text-center" role="alert">
+                            <h2 className="alert-heading">¡Registro Exitoso!</h2>
+                            <div className="text-success">
+                                {registerError.map((error, i) => (
+                                <div key={i}>{error}</div>
+                                ))}
+                            </div>
+                            </div>
+                        
+                        )}
+                </div>
+
+
+*/
