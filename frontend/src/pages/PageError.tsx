@@ -54,7 +54,7 @@ const PageError = () => {
             {isAuth && (
               <>
                 <p>Puedes regresar a la{' '}
-                  <span style={{ textDecoration: 'none', color: '#84B6F4' }}>página de inicio</span>
+                 <Link to={"/"}><span style={{ textDecoration: 'none', color: '#84B6F4' }}>página de inicio</span></Link>
                 </p>
               </>
             )}

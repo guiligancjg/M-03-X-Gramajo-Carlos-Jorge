@@ -46,11 +46,11 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NjVjNTA2YTlmOWM1
 
 ### Crear un Comentario
 
-POST http://localhost:4010/post/6568fdfd5ce837d2afb1fd23
+POST http://localhost:4010/post/6576433c05c6bc5478439c07
 Content-Type: application/json
-authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NmU5MTJkMjNiY2Y0NGVlZDg5Zjg3NCIsImlhdCI6MTcwMTc0NTE1MywiZXhwIjoxNzAxNzgxMTUzfQ.NFB_zS0FRvUmicwvJTruEJ4Oxu2OXqESV8xGsH41bBg
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzY0MmNjMDVjNmJjNTQ3ODQzOWJmZiIsImlhdCI6MTcwMjI1NDY2OCwiZXhwIjoxNzAyMjkwNjY4fQ.0SeUHXrz817NdFWK-x946dJa313YugPpBJFXtI7pHCs
 
 {
-    "description": "Hola Mariela muchas gracias por el comentario!!!"
+    "description": "Hola me gusto tu post!!!"
       
 }

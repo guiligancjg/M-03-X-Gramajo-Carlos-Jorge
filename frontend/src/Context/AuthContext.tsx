@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, createContext, useState, ReactNode, useEffect } from "react";
-import { registerReq, loginRequest, verifyToken, datosUsers } from '../api/auth';
+import { registerReq, loginRequest, verifyToken, ingresarNuevoPost, ingresarNuevocomment } from '../api/auth';
 import User from "../Types/Users";
+import Post from "../Types/Posts";
+import Comments from "../Types/Comments";
 import mostrarUser from "../Types/User";
 import UserLogin from '../Types/login';
 import axios from 'axios';
@@ -12,16 +14,17 @@ import Cookies from "js-cookie"
 
 
 
+
 export interface UserContextInterface {
     user: mostrarUser,
     isAuth: boolean,
     errors: string[],
-    setUserProfile: Dispatch<SetStateAction<User>>,
-    userProfile: User,
     setUser: Dispatch<SetStateAction<mostrarUser>>,
     signup: (user: User) => void,
+    nuevoPost: (post: Post) => void,
+    commentNuevo: (comment: Comments, post_id: string) => void,
     signin: (user: User) => void,
-    profileUser: Dispatch<SetStateAction<User | undefined>>;
+    //profileUser: () => Promise<void | null>,
     signout: () => void,
     setErrors: Dispatch<SetStateAction<string[]>>,
     setIsAuth: Dispatch<SetStateAction<boolean>>
@@ -30,26 +33,21 @@ export interface UserContextInterface {
 
 
 const defaultState = {
-    userProfile: {
-        username: '',
-        email: '',
-        password: '',
-        avatarURL: ''
-    },
     user: {
         username: '',
         avatarURL: ''
     },
     setUser: () => { },
-    setUserProfile: () => { },
     signup: () => { },
+    commentNuevo: () => { },
+    nuevoPost: () => { },
     signin: () => { },
-    profileUser: () => { },
     signout: () => { },
     isAuth: false,
     errors: [],
     setErrors: () => { },
-    setIsAuth: () => { }
+    setIsAuth: () => { },
+   // profileUser: async () => null, // Ajusta según tu lógica
 } as UserContextInterface
 /*postPublic: async () => {
         console.warn('Implementación básica de postPublic: Devuelve una promesa resuelta con un objeto vacío.');
@@ -70,16 +68,10 @@ export default function UserProvider({ children }: UserProvideProps) {
         avatarURL: ''
     });
 
-    const [userProfile, setUserProfile] = useState<User> ({
-        username: '',
-        email: '',
-        password: '',
-        avatarURL: ''
-
-    });
-
+ 
      //al actualizar se iniciaza en false hay que ver el cache
     const [isAuth, setIsAuth] = useState<boolean>(false);
+    
 /******************************************************************************** */
 
 
@@ -102,6 +94,55 @@ export default function UserProvider({ children }: UserProvideProps) {
                 setErrors(error.response?.data);
             } else {
                 console.error('Error desconocido en el registro:', error);
+            }
+            return false;
+           
+        }
+    };
+
+
+
+    const commentNuevo = async (comment: Comments, post_id: string) => {
+        try {
+          
+           const res = await ingresarNuevocomment(comment, post_id);
+           
+           return res;
+            //actualizamos al user con este setUser
+            //
+            
+        } catch (error) {
+
+            // Comprobación de tipo para 'error'
+            if (axios.isAxiosError(error)) {
+                console.error('Error al crear el Comentario:', error);
+                setErrors(error.response?.data);
+            } else {
+                console.error('Error desconocido al crear el Comentario:', error);
+            }
+            return false;
+           
+        }
+    };
+
+
+    const nuevoPost = async (post: Post) => {
+        try {
+          
+           const res = await ingresarNuevoPost(post);
+           
+           return res;
+            //actualizamos al user con este setUser
+            //
+            
+        } catch (error) {
+
+            // Comprobación de tipo para 'error'
+            if (axios.isAxiosError(error)) {
+                console.error('Error al crear el Post:', error);
+                setErrors(error.response?.data);
+            } else {
+                console.error('Error desconocido al crear el post:', error);
             }
             return false;
            
@@ -204,34 +245,29 @@ export default function UserProvider({ children }: UserProvideProps) {
     
    }
 
-
+/*
 const profileUser = async () => {
     const token= Cookies.get('token');
     const isTokenValid = typeof token === 'string' && token.trim() !== '';
-    if(isTokenValid){
-    try {
-        const res = await datosUsers(token);
-        setIsAuth(true);
-        //localStorage.setItem('isAuth', JSON.stringify(true));
-        verifyLogin();
-        setUserProfile(res);
-        return res;
-        
-        //setUser(res.data);
-        //setErrors([]);
-    } catch (error) {
-        console.log("paso los datos a loginResquest en el archivo AuthContex.tsx", error);
-        if (axios.isAxiosError(error)) {
-            //console.log('Error en el registro signin en el archivo AuthContexto:', error);
-            setErrors(error.response?.data); // O ajusta según la estructura de tu error
-        } else {
+    if (isTokenValid) {
+        try {
+          const res = await datosUsers(token);
+          //setIsAuth(true);
+          console.log('Esto son los datos de Users', res);
+          return res;
+        } catch (error) {
+          console.log("paso los datos a loginRequest en el archivo AuthContext.tsx", error);
+          if (axios.isAxiosError(error)) {
+            setErrors(error.response?.data);
+          } else {
             console.log('Error desconocido en el registro:', error);
+          }
+          throw error;
         }
-
-        return false;
-    }
-}
-};
+      } else {
+        return null;
+      }
+};*/
     //Guardar las Cookies
     useEffect(()=>{
         console.log("Se a ejecutado verifyLogin")
@@ -242,7 +278,6 @@ const profileUser = async () => {
     return (
         <UserContext.Provider value={{
             user,
-            userProfile,
             isAuth,
             errors,
             setUser,
@@ -251,8 +286,8 @@ const profileUser = async () => {
             signin,
             setIsAuth,
             signout,
-            profileUser,
-            setUserProfile
+            nuevoPost,
+            commentNuevo,
         }}>
             {children}
         </UserContext.Provider>

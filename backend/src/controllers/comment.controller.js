@@ -26,7 +26,9 @@ export const createComment = async (req, res) =>{
         const { description } = req.body;
         const userId = req.user.id; // Paso el id usuario "656408429f8e3dfb86d74bc0"
         const { postId } = req.params; // Paso el id del POST "6564774b31728eca8755cfa8"
-        
+        console.log("Description: ",description);
+        console.log("Id usuario: ",userId);
+        console.log("Id post: ",postId);
         const newComment = new Comment({
             author: userId,
             description,
@@ -42,12 +44,13 @@ export const createComment = async (req, res) =>{
       );
       console.log(postId);
 
-      res.status(200).json({ message: "El comentario se creo exitosamente!!!", comment: commentSaved, post: updatedPost });
-
+      //res.status(200).json({ message: "El comentario se creo exitosamente!!!", comment: commentSaved, post: updatedPost });
+      //res.status(200).json(["El comentario se creo exitosamente!!!"]);
+      res.json({ success: true});
     } catch (error) {
         
         
-        res.status(400).json({message: "Error al crear el comentario", error});
+        res.status(400).json(["Error al crear el comentario"]);
     }
     
 };

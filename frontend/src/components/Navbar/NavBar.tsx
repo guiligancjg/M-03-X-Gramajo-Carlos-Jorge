@@ -24,7 +24,7 @@ const NavBar = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">Inicio</Nav.Link>
-              <Nav.Link as={Link} to="/destinos">Mis Destinos</Nav.Link>
+              {isAuth && (<Nav.Link as={Link} to="/destinos">Mis Destinos</Nav.Link>)}
               {/* Agrega más enlaces según la estructura de tu sitio */}
             </Nav>
 

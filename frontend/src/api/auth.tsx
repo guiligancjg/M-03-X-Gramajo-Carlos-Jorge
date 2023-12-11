@@ -1,10 +1,39 @@
 /// CONSULTAS AL SERVIDOR
 import { AxiosResponse } from 'axios';
 import User from '../Types/Users';
+import Post from '../Types/Posts';
 import UserLogin from '../Types/login';
 import postsHomeDatos from '../Types/TodosLosPorst';
 import instance from "./setCredentialsAxios"
+import Cookies from "js-cookie"
+import Comments from '../Types/Comments';
 
+
+
+
+
+export const ingresarNuevocomment = async (comment: Comments, post_id: string ): Promise<boolean> => {
+  try {
+    console.log("Este es el comentario que estoy pasando:",comment)
+    const response = await instance.post(`/post/${post_id}`, comment);
+    return response.data.success;
+  } catch (error) {
+    // Manejar errores aquí, por ejemplo, imprimir en la consola
+    console.error('Error en la solicitud de registro en Comments:', error);
+    throw error;
+  }
+};
+
+export const ingresarNuevoPost = async (post: Post): Promise<boolean> => {
+  try {
+    const response = await instance.post(`/createPost`, post);
+    return response.data.success;
+  } catch (error) {
+    // Manejar errores aquí, por ejemplo, imprimir en la consola
+    console.error('Error en la solicitud de registro en registerReq:', error);
+    throw error;
+  }
+};
 
 export const registerReq = async (user: User): Promise<boolean> => {
   try {
@@ -17,7 +46,7 @@ export const registerReq = async (user: User): Promise<boolean> => {
   }
 };
 
-export const loginRequest = async (user: UserLogin): Promise<boolean> =>{
+export const loginRequest = async (user: UserLogin): Promise<boolean> => {
   try {
     const response = await instance.post('/signin', user);
     console.log('Respuesta de loginRequest en el archivo auth.tsx:', response);
@@ -30,8 +59,8 @@ export const loginRequest = async (user: UserLogin): Promise<boolean> =>{
 
 
 export const potsHomePublic = async () => {
-      const response: AxiosResponse<postsHomeDatos[]> = await instance.get('/postsintoken');
-      return response;
+  const response: AxiosResponse<postsHomeDatos[]> = await instance.get('/postsintoken');
+  return response;
 
 };
 
@@ -41,8 +70,8 @@ export const potsHomePublic = async () => {
 
 export const verifyToken = async (token: string) => {
   try {
-    const response: AxiosResponse<string> = await instance.get("/verifyToken", { 
-      headers: { Authorization: `${token}` } 
+    const response: AxiosResponse<string> = await instance.get("/verifyToken", {
+      headers: { Authorization: `${token}` }
     });
     return response.data; // Retorna los datos de la respuesta
   } catch (error) {
@@ -53,15 +82,22 @@ export const verifyToken = async (token: string) => {
 
 
 
-export const datosUsers = async (token: string) => {
-  try {
-    const response: AxiosResponse<User> = await instance.get("/profile", { 
-      headers: { Authorization: `${token}` } 
-    });
-    return response.data; // Retorna los datos de la respuesta
-  } catch (error) {
-    console.error('Error en el Token en la verifyToken en el Frontend:', error);
-    throw error; // Lanza el error para que pueda ser manejado por el código que llama a esta función
-  }
+export const datosUsers = async () => {
+  const token: string = Cookies.get('token');
+  const isTokenValid = typeof token === 'string' && token.trim() !== '';
+  console.log(token);
+  if (isTokenValid) {
+    try {
+      const response = await instance.get("/profile", {
+        headers: { Authorization: `${token}` }
+      });
+      console.log("Estos datos vienen de auth",response.data)
+      return response.data; // Retorna los datos de la respuesta
+
+    } catch (error) {
+      console.error('Error en el Token en la verifyToken en el Frontend:', error);
+      throw error; // Lanza el error para que pueda ser manejado por el código que llama a esta función
+    }
+  }//cierre if
 };
 

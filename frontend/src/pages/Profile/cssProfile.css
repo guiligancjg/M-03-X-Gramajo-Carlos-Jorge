@@ -1,0 +1,29 @@
+.gradient-custom {
+    /* fallback for old browsers */
+    background: #f6d365;
+    
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+    
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1))
+    }
+
+
+    /* ModalStyles.css */
+.modal-custom {
+    background-color: rgba(0, 0, 0, 0.6); /* Ajusta el valor alpha para cambiar la opacidad del fondo */
+  }
+  
+  .modal-header-custom {
+    background-color: #343a40; /* Color de fondo para el encabezado del modal */
+    color: white; /* Color del texto en el encabezado del modal */
+  }
+  
+  .modal-body-custom {
+    color: #343a40; /* Color del texto en el cuerpo del modal */
+  }
+  
+  .modal-footer-custom {
+    background-color: #343a40; /* Color de fondo para el pie del modal */
+  }

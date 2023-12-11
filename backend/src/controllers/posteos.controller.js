@@ -74,12 +74,14 @@ export const createPost = async (req, res) => {
       imageURL,
     });
 
-    const postSaved = await newPost.save();
-    res.status(201).json(postSaved);
+    newPost.save();
+    //res.status(201).json(postSaved);
+    res.json({ success: true});
+
   } catch (error) {
     console.log(req.body);
 
-    res.status(400).json({ message: "Error al crear el post", error });
+    res.status(400).json(["Error al crear el post"]);
   }
 };
 

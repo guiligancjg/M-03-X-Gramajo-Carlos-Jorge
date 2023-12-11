@@ -13,7 +13,7 @@ postRouter.get('/postsintoken', getAllPosteosSinToken);
 
 
 // Rutas privadas
-postRouter.post('/createPost/', verificarToken, createPost);
+postRouter.post('/createPost', verificarToken, createPost);
 postRouter.put('/post/:postId', verificarToken, updatePost);
 postRouter.delete('/post/:postId', verificarToken, deletePostById);
 postRouter.post('/post/:postId', verificarToken, createComment);

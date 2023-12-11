@@ -187,9 +187,9 @@ const { secret } = settingTokenSecret();
 
 export const validarToken = async (req, res) => {
   try {
-    
+    const { token } = req.cookies;
     //const token = req.headers["authorization"];
-    const token = req.headers.authorization;
+    //const token = req.headers.authorization;
     console.log("Esto es token en el Backend en el archivo auth.post",token)
     console.log("Este es el secreto",secret)
 
