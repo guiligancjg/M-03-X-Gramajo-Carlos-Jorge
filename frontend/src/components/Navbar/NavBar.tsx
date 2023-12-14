@@ -35,9 +35,9 @@ const NavBar = () => {
                   <Nav.Link as={Link} to="/profile">Perfil</Nav.Link>
                   <Nav.Link as={Link} to="/nuevo-post">Nuevo Post</Nav.Link>
                   <Dropdown>
-                    <Dropdown.Toggle id="dropdown-basic" className="d-flex align-items-center h-9">
+                    <Dropdown.Toggle id="dropdown-basic" className="d-flex align-items-center h-10 gap-3">
                       <span style={{ textDecoration: 'none', color: '#ffffff' }}>{user.username}</span>
-                      <img style={{ height: '2rem', marginLeft: '1rem' }} src={user.avatarURL} alt="" />
+                      <Image src={user.avatarURL} alt="Foto de perfil" width="25" height="25" roundedCircle />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                       <Dropdown.Item as={Link} to="/profile">Perfil</Dropdown.Item>

@@ -27,3 +27,24 @@
   .modal-footer-custom {
     background-color: #343a40; /* Color de fondo para el pie del modal */
   }
+
+
+  .edit-icon {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    cursor: pointer;
+  }
+
+
+  .contenedor {
+    border: 1px solid #ccc; /* Línea del contenedor */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 8px; /* Bordes redondeados */
+  }
+
+  /* Estilo para separar grupos de inputs y botones */
+  .grupo {
+    margin-bottom: 15px;
+  }

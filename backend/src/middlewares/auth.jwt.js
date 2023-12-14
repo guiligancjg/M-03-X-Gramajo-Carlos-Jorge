@@ -8,7 +8,7 @@ export const verificarToken = async (req, res, next) => {
     //const token = req.headers["authorization"];
     const { token } = req.cookies;
     //const token = req.headers.authorization;
-    console.log("Esto es token en el Backend en el archivo auth.post",token)
+    //console.log("Esto es token en el Backend en el archivo auth.post",token)
 
     if (!token) {
       return res.status(403).json(["No existe el Token..."]);

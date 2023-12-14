@@ -35,6 +35,7 @@ import NuevoPost from "../pages/NuevoPost";
 
 
 
+
 const AppRoutes: React.FC = () => {
 
 
@@ -61,6 +62,7 @@ const AppRoutes: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+      
           <Route path="*" element={<PageError />} />
           </>
        </Route>

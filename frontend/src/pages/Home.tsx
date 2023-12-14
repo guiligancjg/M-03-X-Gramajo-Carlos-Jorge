@@ -1,56 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import postsHomeDatos from "../Types/TodosLosPorst"
 import { potsHomePublic } from "../api/auth"
-import { Accordion, Button, Card, Form, ListGroup, Toast } from 'react-bootstrap';
+import { Accordion, Button, Card, ListGroup, Toast } from 'react-bootstrap';
 import { AxiosResponse } from 'axios';
 import NavBar from '../components/Navbar/NavBar';
 import CarouselHome from '../components/CarouselHome/CarouselHome';
 import FooterHome from '../components/Footer/FooterHome';
 import { useAuth } from '../Context/useAuth';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+
+
+
+/***********************************************************************************************/
+interface Comment {
+    id: number;
+    text: string;
+}
+
+type Action =
+    | { type: 'ADD_COMMENT'; payload: { postId: string; comment: Comment } };
+
+interface State {
+    comments: { [postId: string]: Comment[] };
+}
+
+const initialState: State = {
+    comments: {},
+};
+
+const reducer = (state: State, action: Action): State => {
+    const { postId, comment } = action.payload;
+
+    switch (action.type) {
+        case 'ADD_COMMENT':
+            
+            return {
+                ...state,
+                comments: {
+                    ...state.comments,
+                    [postId]: state.comments[postId] ? [...state.comments[postId], comment] : [comment],
+                },
+            };
+        default:
+            return state;
+    }
+};
+/***********************************************************************************************/
 
 const Home: React.FC = () => {
-    const { isAuth, commentNuevo } = useAuth();
-
+    const { user, isAuth } = useAuth();
     const [data, setData] = useState<postsHomeDatos[]>();
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    /***********************************************************************************************/
+    const { commentNuevo } = useAuth();
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const [newComments, setNewComments] = React.useState<{ [postId: string]: string }>({});
+    const [errorMessage, setErrorMessage] = React.useState<string>('');
 
 
-    const onSubmit = handleSubmit(async (data) => {
-        console.log('entro en onSubmitdddd', data);
-        try {
-            const newComent = {
-                description: data.descriptionComment
-            };
-
-
-            type SignupResult = boolean | void;
-
-            const registroExitoso: SignupResult = await commentNuevo(newComent, data.post_id);
-
-            if (typeof registroExitoso === 'boolean') {
-
-                if (registroExitoso) {
-                    console.log('Registro Exitoso valor del coment', registroExitoso);
-
-
-                } else {
-
-                    console.log('Registro fallido');
-                }
-            } else {
-
-                console.log('La función comment new no devolvió un valor booleano');
-            }
-        } catch (error) {
-
-            console.log(error);
-
-
-        }
-    });
+    /***********************************************************************************************/
 
 
     useEffect(() => {
@@ -68,7 +76,47 @@ const Home: React.FC = () => {
         fetchData();
     }, []);
 
+    /***********************************************************************************************/
+    const handleInputChange = (postId: string, e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNewComments({
+            ...newComments,
+            [postId]: e.target.value,
+        });
+    };
 
+    const handleAddComment = async (postId: string) => {
+        try {
+            const commentText = newComments[postId];
+            if (commentText && commentText.trim() !== '') {
+                const newCommentObj: Comment = {
+                    id: state.comments[postId] ? state.comments[postId].length + 1 : 1,
+                    text: commentText,
+                };
+
+                dispatch({
+                    type: 'ADD_COMMENT',
+                    payload: { postId, comment: newCommentObj },
+                });
+
+                // Llama a la función para agregar el comentario con el ID del usuario
+                const registroExitoso = await commentNuevo(commentText, postId);
+
+                console.log('Registro Exitoso valor del comentario', registroExitoso);
+                setNewComments({
+                    ...newComments,
+                    [postId]: '',
+                });
+                setErrorMessage('');
+            } else {
+                setErrorMessage('El comentario no puede estar vacío.');
+            }
+        } catch (error) {
+            console.log('Error al crear el comentario', error);
+            setErrorMessage('Error al crear el comentario.');
+        }
+    };
+
+    /***********************************************************************************************/
 
 
 
@@ -217,9 +265,10 @@ const Home: React.FC = () => {
                 <div className="container-fluid mt-5">
                     <div className="row">
                         <div className="col-12 col-md-8">
-                            {data && data.map((post, i) => (
-                                <div key={i}>
-                                    {/* Contenido de la columna del 60% */}
+                            {data && data.map((post) => (
+
+                                <div key={post._id}>
+                                    { /* Contenido de la columna del 60% */}
 
                                     <Card className="container-fluid mt-2" style={{ backgroundColor: '#181A1B', color: '#fff' }}>
                                         <Card.Img className='mt-3' variant="top" style={{ minHeight: '200px', maxHeight: '100px', objectFit: 'cover' }}
@@ -240,7 +289,7 @@ const Home: React.FC = () => {
                                         </Card.Body>
                                     </Card>
 
-                                    <Accordion defaultActiveKey="1" className="mt-3">
+                                    <Accordion defaultActiveKey={post._id} className="mt-3">
 
 
                                         <Accordion.Item eventKey="0">
@@ -248,74 +297,65 @@ const Home: React.FC = () => {
                                             {isAuth ? (
                                                 <>
 
-                                                    <Accordion.Body style={{ backgroundColor: '#434344', color: '#fff' }}>
+                                                    <Accordion.Body key={post._id} style={{ backgroundColor: '#434344', color: '#fff' }}>
                                                         {/***************************************************************************************************/}
 
-                                                        <Form>
-                                                            <Form.Group className="mb-3 mt-4" controlId="formBasicdescription">
-                                                                <Form.Label>Ingrese un comentario</Form.Label>
-
-                                                                <Form.Control type="text"
-                                                                    {...register("descriptionComment", { value: 'https://img.icons8.com/?size=192&id=kDoeg22e5jUY&format=png' })}
-                                                                    autoComplete="descriptionComment"
-                                                                    isInvalid={!!errors.descriptionComment}
-                                                                />
-
-
-                                                            </Form.Group>
-
-
-
-                                                            <Form.Text className="text-muted">
-                                                                We'll never share your email with anyone else.
-                                                            </Form.Text>
-                                                            <Form.Group className="mb-3" controlId="formBasicIdPost">
-                                                                <Form.Control type='hidden' value={post._id}
-                                                                    {...register("post_id")}
-                                                                    autoComplete="post_id"
-                                                                    isInvalid={!!errors.post_id}
-                                                                />
-                                                            </Form.Group>
-
-
-
-
-
-                                                            <Button type="submit" variant="primary" onClick={onSubmit}>
-                                                                Aceptar
-                                                            </Button>
-                                                        </Form>
-
-
-                                                        {/***************************************************************************************************/}
-                                                        {data && data.map((post, i) => (
-                                                            <div key={i}>
-
-                                                                {post && post.comments.map((comment, e) => (
-                                                                    <div key={e} className=''>
-                                                                        <Toast style={{ width: 'auto', backgroundColor: '#181A1B', color: '#fff' }} className="container-fluid">
-                                                                            <Toast.Header style={{ width: 'auto', backgroundColor: '#353439', color: '#fff' }}>
-                                                                                <img style={{ height: '34px', width: '34px' }} src={comment.author.avatarURL} className="rounded me-2" alt="" />
-                                                                                <strong className="me-auto">{comment.author.username}</strong>
-                                                                                <span>11 mins ago</span>
-                                                                            </Toast.Header>
-                                                                            <Toast.Body style={{ width: 'auto' }}>{comment.description}</Toast.Body>
-                                                                        </Toast>
-                                                                    </div>
-                                                                ))}
+                                                        {post && post.comments.map((comment, e) => (
+                                                            <div key={e} className=''>
+                                                                <Toast style={{ width: 'auto', backgroundColor: '#181A1B', color: '#fff' }} className="container-fluid mt-3">
+                                                                    <Toast.Header className='mt-2' style={{ width: 'auto', backgroundColor: '#353439', color: '#fff' }}>
+                                                                        <img style={{ height: '34px', width: '34px' }} src={comment.author.avatarURL} className="rounded me-2" alt="" />
+                                                                        <strong className="me-auto">{comment.author.username}</strong>
+                                                                        <span>11 mins ago</span>
+                                                                    </Toast.Header>
+                                                                    <Toast.Body style={{ width: 'auto' }}>{comment.description}</Toast.Body>
+                                                                </Toast>
                                                             </div>
                                                         ))}
+                                                        {/***************************************************************************************************/}
+
+
+
+                                                        <ul>
+                                                            {state.comments[post._id] && state.comments[post._id].map((comment) => (
+                                                                <div key={comment.id} className=''>
+                                                                    <Toast style={{ width: 'auto', backgroundColor: '#181A1B', color: '#fff' }} className="container-fluid mt-3">
+                                                                        <Toast.Header className='mt-2' style={{ width: 'auto', backgroundColor: '#353439', color: '#fff' }}>
+                                                                            <img style={{ height: '34px', width: '34px' }} src={user.avatarURL} className="rounded me-2" alt="" />
+                                                                            <strong className="me-auto">{user.username}</strong>
+                                                                            <span>11 mins ago</span>
+                                                                        </Toast.Header>
+                                                                        <Toast.Body style={{ width: 'auto' }}>{comment.text}</Toast.Body>
+                                                                    </Toast>
+                                                                </div>
+                                                            ))}
+                                                        </ul>
+
+                                                        <div id={post._id}>
+                                                            <textarea
+                                                                id={post._id}
+                                                                rows={4}
+                                                                value={newComments[post._id] || ''}  // Usar newComments[post._id] para el valor
+                                                                onChange={(e) => handleInputChange(post._id, e)}  // Pasar el postId al manejador de cambio
+                                                                placeholder="Agregar comentario"
+                                                                className="form-control mt-5"
+                                                            />
+                                                            <div className='h-1'>{errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}</div>
+
+                                                            <div className="d-flex justify-content-end mt-5">
+                                                                <Button onClick={() => handleAddComment(post._id)} variant="primary" type="submit">
+                                                                    Agregar Comentario
+                                                                </Button>
+                                                            </div>
+                                                        </div>
+
                                                     </Accordion.Body>
-
-
-
-
                                                 </>
                                             ) : (
                                                 <>
 
                                                     <Accordion.Body style={{ backgroundColor: '#434344', color: '#fff' }}>
-                                                        Debes De Estar Registrado,<Link to={"/login"}><span style={{ textDecoration: 'none', color: '#84B6F4' }}>Inicia Sesion Aqui
+                                                        Debes De Estar Registrado, Inicia Sesion <Link to={"/login"}><span style={{ textDecoration: 'none', color: '#84B6F4' }}>Aqui
                                                         </span>
                                                         </Link> Para Comentar.
                                                     </Accordion.Body>

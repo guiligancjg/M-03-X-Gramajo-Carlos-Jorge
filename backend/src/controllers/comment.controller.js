@@ -23,18 +23,20 @@ export const getAllComment = async (req, res) => {
 //CREAR UN COMENTARIO
 export const createComment = async (req, res) =>{
     try {
-        const { description } = req.body;
+        const { description } = req.query;
         const userId = req.user.id; // Paso el id usuario "656408429f8e3dfb86d74bc0"
         const { postId } = req.params; // Paso el id del POST "6564774b31728eca8755cfa8"
         console.log("Description: ",description);
         console.log("Id usuario: ",userId);
         console.log("Id post: ",postId);
+
         const newComment = new Comment({
             author: userId,
-            description,
+            description
         });
         
     const commentSaved = await newComment.save();
+    
 
     // Asocia el comentario al post
     const updatedPost = await Post.findByIdAndUpdate(
@@ -42,7 +44,9 @@ export const createComment = async (req, res) =>{
         { $push: { comments: commentSaved._id } },
         { new: true }
       );
-      console.log(postId);
+
+      //console.log("Esto me devuelve la consulta a la base de datos: ",updatedPost)
+      //console.log(postId);
 
       //res.status(200).json({ message: "El comentario se creo exitosamente!!!", comment: commentSaved, post: updatedPost });
       //res.status(200).json(["El comentario se creo exitosamente!!!"]);

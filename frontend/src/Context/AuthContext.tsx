@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, createContext, useState, ReactNode, useEffect
 import { registerReq, loginRequest, verifyToken, ingresarNuevoPost, ingresarNuevocomment } from '../api/auth';
 import User from "../Types/Users";
 import Post from "../Types/Posts";
-import Comments from "../Types/Comments";
+//import Comments from "../Types/Comments";
 import mostrarUser from "../Types/User";
 import UserLogin from '../Types/login';
 import axios from 'axios';
@@ -22,7 +22,7 @@ export interface UserContextInterface {
     setUser: Dispatch<SetStateAction<mostrarUser>>,
     signup: (user: User) => void,
     nuevoPost: (post: Post) => void,
-    commentNuevo: (comment: Comments, post_id: string) => void,
+    commentNuevo: (comment: string, post_id: string) => void,
     signin: (user: User) => void,
     //profileUser: () => Promise<void | null>,
     signout: () => void,
@@ -35,7 +35,8 @@ export interface UserContextInterface {
 const defaultState = {
     user: {
         username: '',
-        avatarURL: ''
+        avatarURL: '',
+        email: ''
     },
     setUser: () => { },
     signup: () => { },
@@ -65,7 +66,8 @@ export default function UserProvider({ children }: UserProvideProps) {
 
     const [user, setUser] = useState<mostrarUser> ({
         username: '',
-        avatarURL: ''
+        avatarURL: '',
+        email: ''
     });
 
  
@@ -102,11 +104,11 @@ export default function UserProvider({ children }: UserProvideProps) {
 
 
 
-    const commentNuevo = async (comment: Comments, post_id: string) => {
+    const commentNuevo = async (comment: string, post_id: string) => {
         try {
-          
+            console.error('Esto es lo que paso a commentNuevo en el archivo AuthContext', comment);
            const res = await ingresarNuevocomment(comment, post_id);
-           
+           console.error('En el archivo AuthContext lo que paso por res', res);
            return res;
             //actualizamos al user con este setUser
             //
@@ -181,7 +183,8 @@ export default function UserProvider({ children }: UserProvideProps) {
             setIsAuth(false);
             setUser({
                 username: '', 
-                avatarURL: ''
+                avatarURL: '',
+                email: ''
             });
         }
     /*
@@ -228,7 +231,8 @@ export default function UserProvider({ children }: UserProvideProps) {
             //Aqui paso el vector res a mostrarUser, para mostrar el usuario y la foto en la navbarPrivado
             const mostrarUserObj: mostrarUser = {
                 username: res[0],
-                avatarURL: res[1]
+                avatarURL: res[1],
+                email: res[2]
               };
               setUser(mostrarUserObj);
             console.log("Aqui muestro res en el archivo AuthContextffsadf",res)

@@ -1,6 +1,7 @@
 export type mostrarUser = {
     username: string;
-    avatarURL: string
+    avatarURL: string;
+    email: string;
   
   }
   

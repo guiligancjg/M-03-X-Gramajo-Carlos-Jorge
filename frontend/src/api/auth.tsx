@@ -6,16 +6,27 @@ import UserLogin from '../Types/login';
 import postsHomeDatos from '../Types/TodosLosPorst';
 import instance from "./setCredentialsAxios"
 import Cookies from "js-cookie"
-import Comments from '../Types/Comments';
+//import Comments from '../Types/Comments';
 
 
 
-
-
-export const ingresarNuevocomment = async (comment: Comments, post_id: string ): Promise<boolean> => {
+export const actualizarFotoPerfil = async (imagenURL: string) => {
   try {
-    console.log("Este es el comentario que estoy pasando:",comment)
-    const response = await instance.post(`/post/${post_id}`, comment);
+    console.log("Este es el comentario que estoy pasando:",imagenURL)
+    const response = await instance.put(`/profile?avatarURL=${encodeURIComponent(imagenURL)}`);
+    console.log("MUESTRO LO QUE MANDO AL SERVIDOR:",response)
+    return response.data.success;
+  } catch (error) {
+    // Manejar errores aquí, por ejemplo, imprimir en la consola
+    console.error('Error en la solicitud de registro en Comments:', error);
+    throw error;
+  }
+};
+
+export const ingresarNuevocomment = async (description: string, post_id: string ): Promise<boolean> => {
+  try {
+    console.log("Este es el comentario que estoy pasando:",description)
+    const response = await instance.post(`/post/${post_id}?description=${encodeURIComponent(description)}`);
     return response.data.success;
   } catch (error) {
     // Manejar errores aquí, por ejemplo, imprimir en la consola

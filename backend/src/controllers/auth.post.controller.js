@@ -10,8 +10,11 @@ export const signup = async (req, res) => {
   try {
     const { username, email, password, avatarURL } = req.body;
 
-    const userFound = await User.findOne({email});
-    if(userFound) return res.status(400).json(["El Usuario ya existe!!!, ya hay un e-mail registrado."]);
+    const userFound = await User.findOne({ email });
+    if (userFound)
+      return res
+        .status(400)
+        .json(["El Usuario ya existe!!!, ya hay un e-mail registrado."]);
 
     const newUser = new User({
       username,
@@ -22,13 +25,13 @@ export const signup = async (req, res) => {
 
     const uservalidate = await newUser.save();
 
-
     const token = await createAccessToken({ id: uservalidate._id });
-    res.cookie("token", token);    
-    res.json({ success: true});
-   
+    res.cookie("token", token);
+    res.json({ success: true });
   } catch (error) {
-    res.status(404).json({ success: false, message: "Error al crear el Registro!!!" });
+    res
+      .status(404)
+      .json({ success: false, message: "Error al crear el Registro!!!" });
   }
 };
 
@@ -38,53 +41,41 @@ export const signin = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user)
-      return res.status(404).json(["Usuario no esta registrado"]);
+    if (!user) return res.status(404).json(["Usuario no esta registrado"]);
     const verifiedPassword = await User.comparePassword(
       password,
       user.password
     );
 
     if (!verifiedPassword) {
-      return res
-        .status(404)
-        .json(["Password incorrecto..."]);
+      return res.status(404).json(["Password incorrecto..."]);
     } else {
       const token = await createAccessToken({ id: user._id });
-      res.cookie("token", token);    
-      res.json({ success: true});
-    };
-     
-     /* res.status(200).json({
+      res.cookie("token", token);
+      res.json({ success: true });
+    }
+
+    /* res.status(200).json({
         message: "Usuario ingreso con exito!!!",
         token,
       });*/
-    
   } catch (error) {
-    res.status(404).json({ success: false, message: "Error en el inicio de sesion..."});
+    res
+      .status(404)
+      .json({ success: false, message: "Error en el inicio de sesion..." });
   }
 };
 
-
-
 export const logout = async (req, res) => {
   try {
-    res.cookie("token","",{expires: new Date(0)});
+    res.cookie("token", "", { expires: new Date(0) });
     return res.status(200).json(["Hasta pronto!!!"]);
   } catch (error) {
     res.status(400).json(["Error al cerrar la sesión..."]);
   }
-
-}
-
-
+};
 
 //Token para usuarios
-
-
-
-
-
 
 // Obtener información del usuario autenticado
 export const getUserProfile = async (req, res) => {
@@ -103,9 +94,7 @@ export const getUserProfile = async (req, res) => {
     // Devolver la información del usuario
     res.status(200).json(user);
   } catch (error) {
-    res
-      .status(500)
-      .json(["Error al obtener la información del usuario."]);
+    res.status(500).json(["Error al obtener la información del usuario."]);
   }
 };
 
@@ -113,42 +102,123 @@ export const getUserProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { username, email, password, avatarURL } = req.body;
+    const { avatarURL } = req.query;
+    const { username, email, password } = req.body;
 
-    // Verifica si se proporciona una nueva contraseña antes de cifrarla
-    const updatedUserData = {
-        username,
-        email,
-        avatarURL,
-      };
-  
-      if (password) {
-        updatedUserData.password = await User.encryptPassword(password);
+    console.log(username);
+    console.log(email);
+    console.log(password);
+    console.log(avatarURL);
+
+    /*********************************Update avatarURL************************************************* */
+
+    if (avatarURL !== undefined) {
+      if (avatarURL.trim()) {
+        const updatedUserData = {
+          avatarURL,
+        };
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          updatedUserData,
+          {
+            new: true,
+            omitUndefined: true,
+          }
+        );
+        if (!updatedUser) {
+          return res.status(404).json(["Usuario no encontrado."]);
+        }
+        res.status(200).json(["El perfil fue Actualizado"]);
       }
-
-    
-    //const updatedUserData = req.body;
-
-    // Actualizar el perfil del usuario en la base de datos
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedUserData, {
-      new: true,
-      omitUndefined: true,
-    });
-
-    // Verificar si el usuario existe
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
+    } else {
+      // El parámetro avatarURL es undefined
+      console.log("Avatar URL no está presente o es undefined");
     }
 
-    // Devolver la información actualizada del usuario
-    res.status(200).json({ message: "El perfil fue Actualizado"});
+    /*********************************Update username************************************************* */
+    if (username !== undefined) {
+      if (username.trim()) {
+        const updatedUserData = {
+          username,
+        };
+
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          updatedUserData,
+          {
+            new: true,
+            omitUndefined: true,
+          }
+        );
+        if (!updatedUser) {
+          return res.status(404).json(["Usuario no encontrado."]);
+        }
+        res.status(200).json(["El Username fue Actualizado"]);
+      }
+    } else {
+      // El parámetro avatarURL es undefined
+      console.log("Username no está presente o es undefined");
+    }
+
+    /*********************************Update email************************************************* */
+    if (email !== undefined) {
+      if (email.trim()) {
+        const updatedUserData = {
+          email,
+        };
+
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          updatedUserData,
+          {
+            new: true,
+            omitUndefined: true,
+          }
+        );
+        if (!updatedUser) {
+          return res.status(404).json(["Usuario no encontrado."]);
+        }
+        res.status(200).json(["El email fue Actualizado"]);
+      }
+    } else {
+      // El parámetro avatarURL es undefined
+      console.log("email no está presente o es undefined");
+    }
+
+    /*********************************Update email************************************************* */
+    if (password !== undefined) {
+      if (password.trim()) {
+        const updatedUserData = {
+          password,
+        };
+
+        if (password.trim()) {
+          updatedUserData.password = await User.encryptPassword(password);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          updatedUserData,
+          {
+            new: true,
+            omitUndefined: true,
+          }
+        );
+
+        if (!updatedUser) {
+          return res.status(404).json(["Usuario no encontrado."]);
+        }
+
+        // Devolver la información actualizada del usuario
+        res.status(200).json(["El password fue Actualizado"]);
+      } 
+    } else {
+      // El parámetro avatarURL es undefined
+      console.log("password no está presente o es undefined");
+    }
+
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error al actualizar el perfil del usuario.",
-        error: error.message,
-      });
+    res.status(500).json(["Error al actualizar el perfil del usuario."]);
   }
 };
 
@@ -168,49 +238,39 @@ export const deleteAccount = async (req, res) => {
     // Devolver un mensaje de éxito
     res.status(200).json({ message: "Cuenta eliminada exitosamente!!!." });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error al eliminar la cuenta del usuario.",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error al eliminar la cuenta del usuario.",
+      error: error.message,
+    });
   }
 };
 
-
-
-
-
-
 const { secret } = settingTokenSecret();
-
 
 export const validarToken = async (req, res) => {
   try {
     const { token } = req.cookies;
     //const token = req.headers["authorization"];
     //const token = req.headers.authorization;
-    console.log("Esto es token en el Backend en el archivo auth.post",token)
-    console.log("Este es el secreto",secret)
+    //console.log("Esto es token en el Backend en el archivo auth.post",token)
+    //console.log("Este es el secreto",secret)
 
     if (!token) {
       return res.status(403).json(["No existe el Token..."]);
     }
 
     jwt.verify(token, secret, async (err, user) => {
-      
-      if(err) return res.status(401).json(["El Token no esta autorizado..."]);
+      if (err) return res.status(401).json(["El Token no esta autorizado..."]);
       const userFound = await User.findById(user.id);
-      if(!userFound) return res.status(401).json(["Usuario no autorizado Token no esta"]);
+      if (!userFound)
+        return res.status(401).json(["Usuario no autorizado Token no esta"]);
 
-    /*  return res.json({
+      /*  return res.json({
         username: userFound.username,
         avatarURL: userFound.avatarURL
     });*/
-    const { username, avatarURL } = userFound;
-    return res.json([username, avatarURL]);
-
-     
+      const { username, avatarURL, email } = userFound;
+      return res.json([username, avatarURL, email]);
     });
   } catch (error) {
     return res.status(404).json(["error en veifyToken en el servidor"]);
