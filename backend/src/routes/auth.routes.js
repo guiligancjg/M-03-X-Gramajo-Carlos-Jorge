@@ -22,9 +22,9 @@ authRouter.post("/logout", logout);
 
 authRouter.get("/profile", verificarToken, getUserProfile);
 
-authRouter.put("/profile", verificarToken, updateProfile);
+authRouter.put("/profile", validateRegister, verificarToken, updateProfile);
 
-authRouter.delete("/profile/:userId", verificarToken, deleteAccount);
+authRouter.delete("/profile", verificarToken, deleteAccount);
 
 
 /********************************************************************************* */

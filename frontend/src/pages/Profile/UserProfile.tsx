@@ -2,14 +2,69 @@ import React, { FormEvent, useState } from 'react';
 import { Container, Row, Col, Image, Button, Form, Modal } from 'react-bootstrap';
 import { Facebook, Instagram } from 'react-bootstrap-icons';
 import { FaXTwitter } from "react-icons/fa6";
-import { actualizarFotoPerfil } from "../../api/auth"
-import { FaPencilAlt } from 'react-icons/fa';
+import { actualizarFotoPerfil, actualizarDatosUsuario, eliminarUsuario } from "../../api/auth"
+import { FaEye, FaEyeSlash, FaPencilAlt } from 'react-icons/fa';
 import './cssProfile.css';
 import NavBar from '../../components/Navbar/NavBar';
 import FooterHome from '../../components/Footer/FooterHome';
 import { useAuth } from '../../Context/useAuth';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile: React.FC = () => {
+
+
+  const navigate = useNavigate();
+  
+  const { signout } = useAuth();
+
+  const [passwordError, setPasswordError] = useState('');
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = handleSubmit(async (data) => {
+    if (password !== confirmPassword) {
+      setPasswordError('Las contraseñas no coinciden');
+      return;
+    } else {
+      setPasswordError('');
+    }
+    setUser({
+      username: username || user.username,
+      avatarURL: user.avatarURL || '',
+      email: email || user.email
+    });
+
+    try {
+
+      const newDatos = {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+
+      }
+
+      const response = await actualizarDatosUsuario(newDatos);
+      setShowModalGuardado(true);
+      console.log('Respuesta de actualizarFotoPerfil esto responde el servidor:', response);
+    } catch (error) {
+      console.error('Error al actualizar la foto de perfil:', error);
+    }
+
+
+
+    console.log("entro aqui")
+
+  });
+
+
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const { user, setUser } = useAuth();
   const [newImage, setNewImage] = useState<string>('');
   const [showModalCambiarImagen, setShowModalCambiarImagen] = useState<boolean>(false);
@@ -30,7 +85,9 @@ const UserProfile: React.FC = () => {
     });
 
     try {
-      const response = await actualizarFotoPerfil(newImage);
+      const response = await actualizarFotoPerfil(
+        newImage
+      );
       console.log('Respuesta de actualizarFotoPerfil esto responde el servidor:', response);
     } catch (error) {
       console.error('Error al actualizar la foto de perfil:', error);
@@ -42,18 +99,25 @@ const UserProfile: React.FC = () => {
   const handleShow = () => setShowModalDelete(true);
   const handleClose = () => setShowModalDelete(false);
 
-  const handleDelete = () => {
-    console.log('Cuenta eliminada');
+  const handleDelete = async() => {
+    try {
+      const response = await eliminarUsuario();
+      console.log('Usuario eliminado...', response);
+      signout();
+      navigate("/");
+    } catch (error) {
+      console.error('Error al actualizar la foto de perfil:', error);
+    }
     handleClose();
   };
 
-  const handleGuardarCambios = () => {
-    setShowModalGuardado(true);
-  };
 
   const handleCloseModal = () => {
     setShowModalGuardado(false);
   };
+
+
+
 
   return (
     <>
@@ -70,8 +134,11 @@ const UserProfile: React.FC = () => {
                   height="140"
                   roundedCircle
                 />
-                <FaPencilAlt className="edit-icon" onClick={handleOpenModal} />
+                <div className="d-flex justify-content-end align-items-end">
+                  <FaPencilAlt className="edit-icon" onClick={handleOpenModal} />
+                </div>
               </Col>
+
               <Col className="text-left pl-4 mt-4">
                 <h2>{`Hola, ${user.username}!`}</h2>
                 <div className="d-flex justify-content-start mt-3">
@@ -121,7 +188,7 @@ const UserProfile: React.FC = () => {
               </Modal.Footer>
             </Modal>
           </Container>
-         
+
           <Container fluid className="d-flex align-items-center justify-content-center mt-5 w-auto">
             <Form>
 
@@ -130,8 +197,24 @@ const UserProfile: React.FC = () => {
                   Usuario
                 </Form.Label>
                 <Col sm="9" className="d-flex align-items-center justify-content-between">
-                  <Form.Control type="text" placeholder={user.username} />
+                  <Form.Control
+                    type="text"
+                    placeholder={user.username}
+                    value={username}
+
+                    {...register("username", { minLength: 6 })}
+                    autoComplete="username"
+                    isInvalid={!!errors.username}
+                    onChange={(e) => setUsername(e.target.value)}
+
+                  />
+
                 </Col>
+                <div className="d-flex justify-content-center">
+                  {errors.username && errors.username.type === 'minLength' && (
+                    <p>El nombre de usuario no puede tener menos de 6 caracteres</p>
+                  )}
+                </div>
               </Form.Group>
 
               <Form.Group as={Row} className="mb-4" controlId="formUser2">
@@ -139,8 +222,26 @@ const UserProfile: React.FC = () => {
                   E-mail
                 </Form.Label>
                 <Col sm="9" className="d-flex align-items-center justify-content-between">
-                  <Form.Control type="email" placeholder={user.email} />
+                  <Form.Control
+                    type="email"
+                    placeholder={user.email}
+                    value={email}
+                    {...register("email", {
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: 'Ingrese un correo electrónico válido',
+                      },
+                    })}
+                    autoComplete="email"
+                    isInvalid={!!errors.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </Col>
+                <div className="d-flex justify-content-center">
+                  {errors.email && (
+                    <p>Ingrese un correo electrónico válido</p>
+                  )}
+                </div>
               </Form.Group>
 
 
@@ -150,18 +251,58 @@ const UserProfile: React.FC = () => {
                 <Form.Label column sm="3">
                   Nueva Contraseña
                 </Form.Label>
-                <Col sm="9" className="d-flex align-items-center justify-content-between">
-                  <Form.Control type="password" placeholder="*********" autoComplete='password' />
+                <Col sm="9" className="position-relative">
+                  <Form.Control
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="*********"
+                    autoComplete='password'
+                    value={password}
+                    {...register("password", { minLength: 6 })}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <span
+                    className="position-absolute end-12 top-5 translate-middle-y cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                  <div className="d-flex justify-content-center">
+                  {errors.password && errors.password.type === 'minLength' && (
+                    <p>La Contraseña no debe tener menos de 6 caracteres</p>
+                  )}
+                </div>
                 </Col>
               </Form.Group>
 
-              <Form.Group as={Row} className="mb-4" controlId="formUser4">
+              <Form.Group as={Row} className="mb-4" controlId="formConfirmPassword">
                 <Form.Label column sm="3">
                   Confirmar Contraseña
                 </Form.Label>
-                <Col sm="9" className="d-flex align-items-center justify-content-between">
-                  <Form.Control type="password" placeholder="*********" autoComplete='password' />
+                <Col sm="9" className="position-relative">
+                  <Form.Control
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="*********"
+                    autoComplete='password'
+                    value={confirmPassword}
+                    {...register("confirmPassword", { minLength: 6 })}
+                    isInvalid={!!errors.confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <span
+                    className="position-absolute end-12 top-5 translate-middle-y cursor-pointer"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+
                 </Col>
+                <div className="d-flex justify-content-center">
+                  {errors.confirmPassword && errors.confirmPassword.type === 'minLength' && (
+                    <p>El nombre de usuario no puede tener menos de 6 caracteres</p>)}
+                  {passwordError && <p>{passwordError}</p>}
+                </div>
+
               </Form.Group>
 
 
@@ -170,7 +311,7 @@ const UserProfile: React.FC = () => {
 
               <div className="d-flex justify-content-end mt-5">
 
-                <Button variant="primary" type="button" onClick={handleGuardarCambios}>
+                <Button onClick={onSubmit} variant="primary" type="button">
                   Guardar Cambios
                 </Button>
 
@@ -189,7 +330,7 @@ const UserProfile: React.FC = () => {
           </Container>
         </>
       )}
-       <Modal show={showModalDelete} onHide={handleClose}>
+      <Modal show={showModalDelete} onHide={handleClose}>
         <Modal.Header closeButton className='modal-header-custom'>
           <Modal.Title>Confirmar eliminación</Modal.Title>
         </Modal.Header>

@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import postsHomeDatos from "../Types/TodosLosPorst"
 import { potsHomePublic } from "../api/auth"
-import { Accordion, Button, Card, ListGroup, Toast } from 'react-bootstrap';
+import { Accordion, Button, Card, Col, Container, ListGroup, Toast, Image, Row } from 'react-bootstrap';
 import { AxiosResponse } from 'axios';
 import NavBar from '../components/Navbar/NavBar';
-import CarouselHome from '../components/CarouselHome/CarouselHome';
 import FooterHome from '../components/Footer/FooterHome';
 import { useAuth } from '../Context/useAuth';
 import { Link } from 'react-router-dom';
 
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Facebook, Instagram } from 'react-bootstrap-icons';
+import { FaXTwitter } from 'react-icons/fa6';
 
 
 
@@ -50,8 +51,8 @@ const reducer = (state: State, action: Action): State => {
 };
 /***********************************************************************************************/
 
-const Home: React.FC = () => {
-    const { user, isAuth } = useAuth();
+const DetallePost: React.FC = () => {
+    const { user, isAuth, idUser } = useAuth();
     const [data, setData] = useState<postsHomeDatos[]>();
 
     /***********************************************************************************************/
@@ -68,7 +69,9 @@ const Home: React.FC = () => {
         const fetchData = async () => {
             try {
                 const response: AxiosResponse<postsHomeDatos[]> = await potsHomePublic();
-                setData(response.data);
+               
+                const userPosts = response.data.filter(post => post.author._id === idUser);
+                setData(userPosts);
                 //console.log('Respuesta de potsHomePubasdfasdflic:', response);
             } catch (error) {
                 console.error('Error al cargar datos:', error);
@@ -77,7 +80,7 @@ const Home: React.FC = () => {
         };
 
         fetchData();
-    }, []);
+    }, [idUser]);
 
     /***********************************************************************************************/
     const handleInputChange = (postId: string, e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -127,132 +130,44 @@ const Home: React.FC = () => {
         <>
 
             <NavBar />
-            <CarouselHome />
+            <Container fluid className="d-flex align-items-center justify-content-center mt-5">
+                <Row>
+                    <Col className='w-140 position-relative'>
+                        <Image
+                            src={user?.avatarURL}
+                            alt="Foto de perfil"
+                            width="140"
+                            height="140"
+                            roundedCircle
+                        />
 
-            <div className="container mt-3">
-                <section className="wid-menu-categories wid">
-                    <article className="row">
-                        <nav>
-                            <ul className="d-flex justify-content-between flex-wrap" style={{ listStyle: 'none' }}>
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_argentina.png"
-                                                alt="Paquetes Argentina"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_argentina.png"
-                                            />
-                                            <p className="mt-2">Argentina</p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_brasil.png"
-                                            />
-                                            <p className="mt-2">Brasil</p>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_caribe.png"
-                                            />
-                                            <p className="mt-2">Caribe</p>
-                                        </div>
-                                    </a>
-                                </li>
+                    </Col>
 
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_centro_norteamerica.png"
-                                            />
-                                            <p className="mt-2">Centro y Norteamérica</p>
-                                        </div>
-                                    </a>
-                                </li>
+                    <Col className="text-left pl-4 mt-4">
+                        <h2>{`Hola, ${user.username}!`}</h2>
+                        <div className="d-flex justify-content-start mt-3">
+                            <a href="#!">
+                                <Facebook className="me-3" size={24} />
+                            </a>
+                            <a href="#!">
+                                <FaXTwitter className="me-3" size={24} />
+                            </a>
+                            <a href="#!">
+                                <Instagram size={24} />
+                            </a>
+                        </div>
+                    </Col>
+                </Row>
 
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_europa.png"
-                                            />
-                                            <p className="mt-2">Europa</p>
-                                        </div>
-                                    </a>
-                                </li>
+            </Container>
 
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_mundo.png"
-                                            />
-                                            <p className="mt-2">Resto del Mundo</p>
-                                        </div>
-                                    </a>
-                                </li>
-
-                                <li className="mr-3 flex-grow-1">
-                                    <a href="#" className="category-name" style={{ textDecoration: 'none' }}>
-                                        <div className="d-flex flex-column align-items-center">
-                                            <img
-                                                data-src="/assets/images/A/VIA/icons/retina/ico_brasil.png"
-                                                alt="Paquetes Brasil"
-                                                width="98"
-                                                height="69"
-                                                className=""
-                                                src="imagenes/ico_sudamerica2.png"
-                                            />
-                                            <p className="mt-2">Sudamérica</p>
-                                        </div>
-                                    </a>
-                                </li>
-                                {/* Repite el mismo patrón para los demás elementos */}
-                            </ul>
-                        </nav>
-                    </article>
-                </section>
+           <div className="container mt-3">
+          
 
 
                 <div className="container-fluid mt-5">
                     <div className="row">
-                        <div className="col-12 col-md-8">
+                        <div className="col-12">
                             {data && data.map((post) => (
 
                                 <div key={post._id}>
@@ -272,15 +187,7 @@ const Home: React.FC = () => {
 
                                             }</ListGroup.Item>
                                         </ListGroup>
-                                        {isAuth && (
-                                            <>    <Card.Body>
-                                                <Card.Link >Post creado por el usuario: {post.author.username}</Card.Link>
-                                            </Card.Body>
-
-
-                                            </>
-                                        )}
-
+                                        
                                     </Card>
 
                                     <Accordion defaultActiveKey={post._id} className="mt-3">
@@ -378,22 +285,7 @@ const Home: React.FC = () => {
                         </div>
 
 
-                        <div className="col-12 col-md-4 mt-0" >
-                            {/* Contenido de la columna del 40% */}
-                            {data && data.map((post, i) => (
-                                <div key={i}>
-                                    <Card className="container-fluid mt-2" style={{ backgroundColor: '#191B1C', color: '#fff' }}>
-                                        <Card.Header className="mt-2" style={{ backgroundColor: '#26292A', color: '#fff' }}>{
-                                            new Date(post.createdAt).toLocaleDateString('es-AR', { weekday: "long", year: "numeric", month: "short", day: "numeric" })
-                                        }</Card.Header>
-                                        <Card.Body>
-                                            <Card.Title>{post.title}</Card.Title>
-                                            <Card.Text>{post.description}</Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-                            ))}
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -404,7 +296,7 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
+export default DetallePost;
 
 
 

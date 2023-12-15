@@ -102,125 +102,40 @@ export const getUserProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { avatarURL } = req.query;
-    const { username, email, password } = req.body;
+    const fieldsToUpdate = [
+      { name: 'avatarURL', value: req.query.avatarURL },
+      { name: 'username', value: req.body.username },
+      { name: 'email', value: req.body.email },
+      { name: 'password', value: req.body.password, encrypt: true },
+    ];
 
-    console.log(username);
-    console.log(email);
-    console.log(password);
-    console.log(avatarURL);
+    console.log(req.query.avatarURL)
+    for (const field of fieldsToUpdate) {
+      const { name, value, encrypt } = field;
 
-    /*********************************Update avatarURL************************************************* */
+      if (value !== undefined && value.trim()) {
+        const updatedUserData = { [name]: encrypt ? await User.encryptPassword(value) : value };
 
-    if (avatarURL !== undefined) {
-      if (avatarURL.trim()) {
-        const updatedUserData = {
-          avatarURL,
-        };
         const updatedUser = await User.findByIdAndUpdate(
           userId,
           updatedUserData,
-          {
-            new: true,
-            omitUndefined: true,
-          }
+          { new: true, omitUndefined: true }
         );
+
         if (!updatedUser) {
-          return res.status(404).json(["Usuario no encontrado."]);
+          return res.status(404).json([`Usuario no encontrado al actualizar ${name}.`]);
         }
-        res.status(200).json(["El perfil fue Actualizado"]);
+      } else {
+        console.log(`${name} no está presente o es undefined`);
       }
-    } else {
-      // El parámetro avatarURL es undefined
-      console.log("Avatar URL no está presente o es undefined");
     }
 
-    /*********************************Update username************************************************* */
-    if (username !== undefined) {
-      if (username.trim()) {
-        const updatedUserData = {
-          username,
-        };
-
-        const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          updatedUserData,
-          {
-            new: true,
-            omitUndefined: true,
-          }
-        );
-        if (!updatedUser) {
-          return res.status(404).json(["Usuario no encontrado."]);
-        }
-        res.status(200).json(["El Username fue Actualizado"]);
-      }
-    } else {
-      // El parámetro avatarURL es undefined
-      console.log("Username no está presente o es undefined");
-    }
-
-    /*********************************Update email************************************************* */
-    if (email !== undefined) {
-      if (email.trim()) {
-        const updatedUserData = {
-          email,
-        };
-
-        const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          updatedUserData,
-          {
-            new: true,
-            omitUndefined: true,
-          }
-        );
-        if (!updatedUser) {
-          return res.status(404).json(["Usuario no encontrado."]);
-        }
-        res.status(200).json(["El email fue Actualizado"]);
-      }
-    } else {
-      // El parámetro avatarURL es undefined
-      console.log("email no está presente o es undefined");
-    }
-
-    /*********************************Update email************************************************* */
-    if (password !== undefined) {
-      if (password.trim()) {
-        const updatedUserData = {
-          password,
-        };
-
-        if (password.trim()) {
-          updatedUserData.password = await User.encryptPassword(password);
-        }
-
-        const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          updatedUserData,
-          {
-            new: true,
-            omitUndefined: true,
-          }
-        );
-
-        if (!updatedUser) {
-          return res.status(404).json(["Usuario no encontrado."]);
-        }
-
-        // Devolver la información actualizada del usuario
-        res.status(200).json(["El password fue Actualizado"]);
-      } 
-    } else {
-      // El parámetro avatarURL es undefined
-      console.log("password no está presente o es undefined");
-    }
-
+    res.status(200).json(["Los datos están actualizados."]);
   } catch (error) {
     res.status(500).json(["Error al actualizar el perfil del usuario."]);
   }
 };
+
 
 // Eliminar la cuenta del usuario autenticado
 export const deleteAccount = async (req, res) => {
@@ -232,11 +147,11 @@ export const deleteAccount = async (req, res) => {
 
     // Verificar si el usuario existe
     if (!deletedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
+      return res.status(404).json(["Usuario no encontrado."]);
     }
 
     // Devolver un mensaje de éxito
-    res.status(200).json({ message: "Cuenta eliminada exitosamente!!!." });
+    res.status(200).json(["Cuenta eliminada exitosamente!!!."]);
   } catch (error) {
     res.status(500).json({
       message: "Error al eliminar la cuenta del usuario.",
@@ -244,6 +159,7 @@ export const deleteAccount = async (req, res) => {
     });
   }
 };
+
 
 const { secret } = settingTokenSecret();
 
@@ -269,10 +185,12 @@ export const validarToken = async (req, res) => {
         username: userFound.username,
         avatarURL: userFound.avatarURL
     });*/
-      const { username, avatarURL, email } = userFound;
-      return res.json([username, avatarURL, email]);
+      const { _id, username, avatarURL, email } = userFound;
+      return res.json([_id, username, avatarURL, email]);
     });
   } catch (error) {
     return res.status(404).json(["error en veifyToken en el servidor"]);
   }
 };
+
+

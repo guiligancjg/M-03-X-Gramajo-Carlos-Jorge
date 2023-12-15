@@ -54,3 +54,9 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzY0MmNjMDVjNmJj
     "description": "Hola me gusto tu post!!!"
       
 }
+
+
+### Traer un post
+
+POST http://localhost:4010/postid/657b68bb965a23bbdddaa437
+Content-Type: application/json

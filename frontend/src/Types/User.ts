@@ -1,4 +1,4 @@
-export type mostrarUser = {
+export type mostrarUser = {    
     username: string;
     avatarURL: string;
     email: string;

@@ -30,6 +30,9 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import UserProfile from "../pages/Profile/UserProfile";
 import NuevoPost from "../pages/NuevoPost";
+import MisDestinos from "../pages/MisDestinos";
+import EditarPost from "../pages/EditarPost";
+import DetallePost from "../pages/DatallePost";
 
 
 
@@ -53,6 +56,9 @@ const AppRoutes: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/nuevo-post" element={<NuevoPost />} />
+          <Route path="/destinos" element={<MisDestinos />} />
+          <Route path="/editar-destino" element={<EditarPost />} />
+          <Route path="/detalle-post" element={<DetallePost />} />
           <Route path="*" element={<PageError />} />
         </>
        </Route>

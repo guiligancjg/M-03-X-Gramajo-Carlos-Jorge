@@ -52,11 +52,13 @@ export const getAllPosteosSinToken = async (req, res) => {
 
 export const getPostById = async (req, res) => {
   try {
+    console.log("entro")
     const { postId } = req.params;
+    console.log(postId)
     const post = await Post.findById(postId);
     res.status(200).json(post);
   } catch (error) {
-    return res.json({ message: "Error al buscar un post por id" });
+    return res.json(["Error al buscar un post por id"]);
   }
 };
 
@@ -84,6 +86,8 @@ export const createPost = async (req, res) => {
     res.status(400).json(["Error al crear el post"]);
   }
 };
+
+
 
 //ACTUALIZAR UN POST
 export const updatePost = async (req, res) => {

@@ -1,4 +1,7 @@
 import { body, validationResult } from "express-validator";
+
+
+
 export const validateRegister = [
   body("username")
     .notEmpty()
@@ -36,5 +39,6 @@ export const manejarErroresValidacion = (req, res, next) => {
   
   next();
 };
+
 
 

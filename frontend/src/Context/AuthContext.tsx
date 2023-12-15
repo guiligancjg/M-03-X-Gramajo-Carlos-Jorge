@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useState, ReactNode, useEffect } from "react";
-import { registerReq, loginRequest, verifyToken, ingresarNuevoPost, ingresarNuevocomment } from '../api/auth';
+import { registerReq, loginRequest, verifyToken, ingresarNuevoPost, ingresarNuevocomment, traigoUnPost } from '../api/auth';
 import User from "../Types/Users";
 import Post from "../Types/Posts";
 //import Comments from "../Types/Comments";
@@ -18,6 +18,12 @@ import Cookies from "js-cookie"
 export interface UserContextInterface {
     user: mostrarUser,
     isAuth: boolean,
+    idUser: string,
+    idDelPosteo: string,
+    idPost?: Post,
+    setPost: Dispatch<SetStateAction<Post>>,
+    setidDelPosteo: Dispatch<SetStateAction<string>>,
+    unPost: (post: string) => void,
     errors: string[],
     setUser: Dispatch<SetStateAction<mostrarUser>>,
     signup: (user: User) => void,
@@ -38,13 +44,23 @@ const defaultState = {
         avatarURL: '',
         email: ''
     },
+    idPost:{
+        title: '',
+        description: '',
+        imageURL: ''
+      },
+    unPost: () => { },
     setUser: () => { },
+    setPost: () => { },
+    setidDelPosteo: () => { },
     signup: () => { },
     commentNuevo: () => { },
     nuevoPost: () => { },
     signin: () => { },
     signout: () => { },
     isAuth: false,
+    idUser: '',
+    idDelPosteo: '',
     errors: [],
     setErrors: () => { },
     setIsAuth: () => { },
@@ -73,6 +89,15 @@ export default function UserProvider({ children }: UserProvideProps) {
  
      //al actualizar se iniciaza en false hay que ver el cache
     const [isAuth, setIsAuth] = useState<boolean>(false);
+    const [idUser, setidUser] = useState<string>('');
+    const [idDelPosteo, setidDelPosteo] = useState<string>('');
+    const [idPost, setPost] = useState<Post> ({
+        title: '',
+        description: '',
+        imageURL: ''
+    });
+
+
     
 /******************************************************************************** */
 
@@ -152,6 +177,30 @@ export default function UserProvider({ children }: UserProvideProps) {
     };
 
 
+    const unPost = async (post: string) => {
+        console.log("entro en un post funcion")
+        try {
+           setidDelPosteo(post);
+           const res = await traigoUnPost(post);
+           console.log("Aqui traigo el post del servidor: ",res)
+           setPost(res)
+           return res;
+
+            
+        } catch (error) {
+
+            // Comprobación de tipo para 'error'
+            if (axios.isAxiosError(error)) {
+                console.error('Error al crear el Post:', error);
+                setErrors(error.response?.data);
+            } else {
+                console.error('Error desconocido al crear el post:', error);
+            }
+            return false;
+           
+        }
+    };
+
     const signin = async (user: UserLogin) => {
         
         try {
@@ -230,11 +279,12 @@ export default function UserProvider({ children }: UserProvideProps) {
             setIsAuth(true);
             //Aqui paso el vector res a mostrarUser, para mostrar el usuario y la foto en la navbarPrivado
             const mostrarUserObj: mostrarUser = {
-                username: res[0],
-                avatarURL: res[1],
-                email: res[2]
+                username: res[1],
+                avatarURL: res[2],
+                email: res[3]
               };
               setUser(mostrarUserObj);
+              setidUser(res[0]);
             console.log("Aqui muestro res en el archivo AuthContextffsadf",res)
             return true;
         } catch (error) {
@@ -284,6 +334,12 @@ const profileUser = async () => {
             user,
             isAuth,
             errors,
+            idUser,
+            idPost,
+            idDelPosteo,
+            setidDelPosteo,
+            unPost,
+            setPost,
             setUser,
             setErrors,
             signup,
